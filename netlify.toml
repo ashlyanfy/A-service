@@ -1,0 +1,3 @@
+# Конфигурация Netlify: сайт публикуется из папки frontend
+[build]
+  publish = "frontend"
