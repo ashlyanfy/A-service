@@ -15,3 +15,7 @@
 a.button[href^="https://wa.me"]{background:#25d366;border-color:#25d366;color:#fff}
 a.button[href^="https://wa.me"]:hover,a.button[href^="https://wa.me"]:focus-visible{background:#1ebe5d;border-color:#1ebe5d;color:#fff}
 .mobile-menu-panel{background:#fff;-webkit-backdrop-filter:none;backdrop-filter:none}
+.service-hero-image:after,.project-lead-image:after,.photo-figure:after{top:auto;bottom:0}
+.service-hero-image{display:grid}
+.as-bank-logo-item img,.as-bank-logo-list img,.as-bank-logos img,.as-bank-proof>div img{height:46px;max-width:min(180px,100%)}
+.as-bank-logo-item img[src="/brands/bank-centercredit.svg"],.as-bank-logo-item img[src="/brands/bereke-bank.svg"],.as-bank-logo-item img[src="/brands/nurbank.png"]{height:38px}
