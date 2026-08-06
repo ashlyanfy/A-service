@@ -1,0 +1,24 @@
+User-Agent: *
+Allow: /
+Disallow: /api/
+
+User-Agent: Googlebot
+Allow: /
+
+User-Agent: Bingbot
+Allow: /
+
+User-Agent: OAI-SearchBot
+Allow: /
+
+User-Agent: ChatGPT-User
+Allow: /
+
+User-Agent: PerplexityBot
+Allow: /
+
+User-Agent: ClaudeBot
+Allow: /
+
+Host: https://precious-brioche-cad6ee.netlify.app
+Sitemap: https://precious-brioche-cad6ee.netlify.app/sitemap.xml

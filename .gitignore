@@ -1,0 +1,33 @@
+# Claude Code — локальные настройки сессии
+.claude/
+
+# Системный мусор Windows / macOS
+Thumbs.db
+ehthumbs.db
+desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# Редакторы и IDE
+.vscode/
+.idea/
+*.swp
+
+# Логи и временные файлы
+*.log
+*.tmp
+*.bak
+~$*
+
+# Node.js (на случай, если позже добавите исходники проекта)
+node_modules/
+.next/
+out/
+
+# Netlify — локальная папка CLI
+.netlify/
+
+# Архивы и локальные черновики
+*.zip
+*.rar
+*.7z
