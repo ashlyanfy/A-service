@@ -1,4 +1,4 @@
-const CACHE_NAME = "a-service-static-v6-brand-v2";
+const CACHE_NAME = "a-service-static-v7-brand-v2";
 const OFFLINE_URLS = ["/ru/offline/", "/kk/offline/"];
 const PRECACHE = [
   "/manifest.webmanifest",

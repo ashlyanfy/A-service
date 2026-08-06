@@ -6,3 +6,12 @@
 .language-switcher a+a:before{content:none;margin:0}
 .hero-pause{display:none!important}
 .home-hero:after,.service-hero:after,.standard-hero:after{content:none!important;display:none!important}
+
+.service-index{top:auto;right:auto}
+.desktop-nav a,.header-phone{display:inline-flex;align-items:center}
+.whatsapp-float{background:#25d366;box-shadow:0 16px 38px #188b4b57,0 0 0 7px #25d3661a}
+.whatsapp-float:before{border-color:#25d36657}
+.whatsapp-float:hover,.whatsapp-float:focus-visible{background:#1ebe5d;box-shadow:0 20px 44px #188b4b6b,0 0 0 9px #25d36621}
+a.button[href^="https://wa.me"]{background:#25d366;border-color:#25d366;color:#fff}
+a.button[href^="https://wa.me"]:hover,a.button[href^="https://wa.me"]:focus-visible{background:#1ebe5d;border-color:#1ebe5d;color:#fff}
+.mobile-menu-panel{background:#fff;-webkit-backdrop-filter:none;backdrop-filter:none}
