@@ -5,38 +5,54 @@
 
 Продакшн: https://majestic-salmiakki-b87621.netlify.app
 
+Сайт — чистая статика (HTML/CSS/JS без фреймворков), собирается из `src/` в `frontend/`.
+
 ## Структура репозитория
 
 ```
-├── frontend/     # лендинг-сайт (статический экспорт Next.js) — публикуется на Netlify
-│   ├── ru/           # страницы на русском
-│   ├── kk/           # страницы на казахском
-│   ├── _next/        # JS/CSS-сборка Next.js
-│   ├── images/ icons/ video/ brands/   # медиа
-│   ├── _redirects    # правила редиректов Netlify (/ → /ru/ и т.д.)
-│   ├── _headers      # HTTP-заголовки Netlify
-│   └── sitemap.xml, robots.txt, sw.js, манифесты PWA
-├── backend/      # серверная часть (зарезервировано, см. backend/README.md)
-├── admin/        # админ-панель (зарезервировано, см. admin/README.md)
-└── netlify.toml  # конфиг Netlify: publish = "frontend"
+├── src/              # ИСХОДНИКИ — править здесь
+│   ├── build.py          # сборка: python src/build.py  ->  frontend/
+│   ├── content/ru/ kk/   # по файлу на страницу: front-matter (@meta/@head/@jsonld) + <main>
+│   ├── templates/        # шапка, подвал+диалог расчёта, общий JSON-LD (по локали)
+│   ├── assets/css/       # слои каскада 10..60 — подключаются строго по номерам
+│   ├── assets/js/        # main.js (шапка, reveal, видео), form.js (анкета), search.js
+│   └── tools/            # одноразовые скрипты миграции (extract, split_css, ...)
+├── frontend/         # РЕЗУЛЬТАТ СБОРКИ — публикуется на Netlify, руками не править
+│   ├── ru/ kk/           # собранные страницы
+│   ├── assets/           # site.css (склейка слоёв), js, search-*.json
+│   ├── images/ icons/ video/ brands/   # медиа (копируются как есть)
+│   └── _redirects, _headers, sitemap.xml, robots.txt, sw.js, манифесты PWA
+├── backend/  admin/  # зарезервировано (см. README внутри)
+└── netlify.toml      # publish = "frontend"
 ```
 
-## Деплой
-
-Netlify публикует содержимое папки `frontend/` (задано в `netlify.toml`).
-Команда сборки не нужна — в репозитории уже готовая статика.
-
-При ручном деплое (drag-and-drop или CLI) загружайте папку `frontend/`.
-
-## Локальный запуск
+## Сборка и запуск
 
 ```bash
+python src/build.py
 python -m http.server 8734 --directory frontend
 ```
 
 Затем открыть http://localhost:8734/ru/
 
-## Правки стилей
+## Как править
 
-Глобальный CSS: `frontend/_next/static/chunks/0.c7rya17m5lt.css`.
-Кастомные правки добавлены в конец файла (блок `custom overrides`).
+- **Текст/разметку страницы** — `src/content/<lang>/<slug>.html`, затем сборка.
+  Вложенные страницы: `blog__slug.html` -> `/ru/blog/slug/`.
+- **Стили** — `src/assets/css/60-fixes.css` (последний слой перекрывает все).
+  Файлы 10–50 — исторические слои старого дизайна, порядок менять нельзя.
+- **Шапку/подвал/диалог** — `src/templates/*-{ru,kk}.html` (общие для всех страниц).
+- **Поведение** — `src/assets/js/*.js`.
+- Ссылки на CSS/JS версионируются хэшем автоматически (`?v=`), кэш сбрасывается сам.
+
+## Формы
+
+Netlify Forms: форма `a-service-project-brief` (диалог на каждой странице + встроенная
+на «Контактах» и «Запросе КП»). Трёхшаговый визард — `src/assets/js/form.js`,
+справочник категорий/подзадач там же.
+
+## История
+
+До 2026-08 сайт был статическим экспортом Next.js (85 страниц × 2 локали, дубли
+контента в RSC-payload). Переведён на чистую статику без изменения дизайна;
+исходники старой сборки — в git-истории.

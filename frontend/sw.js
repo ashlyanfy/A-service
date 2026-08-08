@@ -1,4 +1,4 @@
-const CACHE_NAME = "a-service-static-v8-brand-v2";
+const CACHE_NAME = "a-service-static-v9-clean";
 const OFFLINE_URLS = ["/ru/offline/", "/kk/offline/"];
 const PRECACHE = [
   "/manifest.webmanifest",
@@ -76,7 +76,7 @@ self.addEventListener("fetch", (event) => {
     url.pathname.startsWith("/icons/") ||
     (url.pathname.startsWith("/video/") &&
       !request.headers.has("range")) ||
-    url.pathname.startsWith("/_next/static/")
+    url.pathname.startsWith("/assets/")
   ) {
     event.respondWith(
       caches.match(request).then(

@@ -1,0 +1,170 @@
+/* Слой 6. Правки вёрстки (2026-08-08): ровная фотосетка тёмных секций,
+   строка «Смежные страницы» в каталоге услуг, форма на узких панелях.
+   Подключается последним. */
+
+/* --- Фотосетка «Процесс виден в деталях» (Проекты, О компании, главная).
+   Раньше: 4 колонки с фикс. высотой строки 380px из первого слоя дизайна,
+   при этом подпись стала блочной в третьем слое — карточки переполнялись
+   и сетка рвалась. Теперь: две ровные колонки, одинаковые карточки,
+   высота от контента; нечётная последняя карточка занимает всю ширину. --- */
+.experience-grid {
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-auto-rows:auto;
+  gap:18px;
+}
+
+.experience-grid figure,
+.experience-grid figure.wide {
+  grid-column:auto;
+  flex-direction:column;
+  margin:0;
+  display:flex;
+}
+
+.experience-grid figure:last-child:nth-child(odd) {
+  grid-column:1/-1;
+}
+
+.experience-grid figure img {
+  width:100%;
+  height:280px;
+  min-height:0;
+  flex:none;
+}
+
+.experience-grid figure:last-child:nth-child(odd) img {
+  height:320px;
+}
+
+.experience-grid figcaption {
+  position:static;
+  flex:1;
+  min-height:0;
+  width:auto;
+  background:none;
+}
+
+/* градиент-оверлей затемнял блок подписи — подпись больше не лежит на фото */
+.experience-grid figure:after {
+  content:none;
+}
+
+@media (max-width:700px) {
+  .experience-grid {
+    grid-template-columns:1fr;
+  }
+  .experience-grid figure img,
+  .experience-grid figure:last-child:nth-child(odd) img {
+    height:220px;
+  }
+}
+
+/* --- Главная, фотолента «Процесс виден в деталях»: горизонтальная карусель.
+   Автопрокрутка и перетаскивание — в main.js (initCarousel). --- */
+.experience-carousel {
+  scroll-snap-type:x mandatory;
+  cursor:grab;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  display:flex;
+  overflow-x:auto;
+}
+
+.experience-carousel::-webkit-scrollbar {
+  display:none;
+}
+
+.experience-carousel.is-dragging {
+  scroll-snap-type:none;
+  cursor:grabbing;
+  user-select:none;
+}
+
+.experience-carousel figure,
+.experience-carousel figure.wide,
+.experience-carousel figure:last-child:nth-child(odd) {
+  scroll-snap-align:start;
+  flex:0 0 min(480px, 88%);
+  grid-column:auto;
+}
+
+.experience-carousel figure img,
+.experience-carousel figure:last-child:nth-child(odd) img {
+  height:280px;
+  pointer-events:none;
+}
+
+@media (max-width:700px) {
+  .experience-carousel figure img,
+  .experience-carousel figure:last-child:nth-child(odd) img {
+    height:220px;
+  }
+}
+
+/* --- Каталог услуг: компактная строка ссылок на смежные страницы --- */
+.service-links {
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:18px;
+  display:flex;
+}
+
+.service-links-label {
+  color:#6e747d;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+  margin-right:4px;
+  font-size:11px;
+  font-weight:800;
+}
+
+.service-link {
+  color:var(--as-brand-700, var(--violet));
+  background:var(--as-brand-050, #f1edf9);
+  border:1px solid #3e2c8d24;
+  border-radius:999px;
+  padding:8px 16px;
+  font-size:13px;
+  font-weight:650;
+  line-height:1.2;
+  transition:background .18s,border-color .18s,color .18s;
+}
+
+.service-link:hover,
+.service-link:focus-visible {
+  color:#fff;
+  background:var(--as-brand-700, var(--violet));
+  border-color:var(--as-brand-700, var(--violet));
+}
+
+/* --- Анкета: выбор типа работ.
+   Жёсткие 5 колонок обрезали подписи в узкой панели на странице контактов;
+   auto-fit держит те же 5 колонок в широком диалоге и переносит карточки
+   рядами там, где тесно. --- */
+.quote-category-grid {
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+}
+
+.quote-category-grid label {
+  min-width:0;
+}
+
+.quote-category-grid label>span {
+  overflow-wrap:break-word;
+}
+
+/* --- «О компании», блок фактов: сетка была на 5 колонок при трёх карточках —
+   справа оставалась пустота. Колонки по числу карточек. --- */
+.timeline {
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+}
+
+/* --- Контакты: на средних экранах двухколоночная сетка становилась тесной —
+   раньше колонки жались до нечитаемых карточек. Складываем раньше. --- */
+@media (max-width:1100px) {
+  .contacts-grid {
+    grid-template-columns:1fr;
+    gap:56px;
+  }
+}

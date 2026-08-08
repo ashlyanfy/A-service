@@ -1,0 +1,705 @@
+   0 rule :root
+   1 rule *
+   2 rule html
+   3 rule body
+   4 rule img
+   5 rule a
+   6 rule button,input,select,textarea
+   7 rule button,summary,a
+   8 rule button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible,a:f
+   9 rule h1,h2,h3,p,figure
+  10 rule h1,h2,h3
+  11 rule h1
+  12 rule h2
+  13 rule h3
+  14 rule ::selection
+  15 rule .skip-link
+  16 rule .skip-link:focus
+  17 rule .sr-only
+  18 rule .muted
+  19 rule .eyebrow
+  20 rule .button
+  21 rule .button:hover
+  22 rule .button-primary
+  23 rule .button-primary:hover
+  24 rule .button-secondary
+  25 rule .button-secondary:hover
+  26 rule .contact-section .button-secondary,.not-found-page .button-secondary
+  27 rule .button-dark
+  28 rule .button-light
+  29 rule .button-small
+  30 rule .center-action
+  31 rule .site-header
+  32 rule .header-inner
+  33 rule .brand
+  34 rule .brand img,.footer-brand img
+  35 rule .desktop-nav
+  36 rule .desktop-nav a
+  37 rule .desktop-nav a:after
+  38 rule .desktop-nav a:hover:after,.desktop-nav a.active:after
+  39 rule .header-actions
+  40 rule .search-link
+  41 rule .language-switcher
+  42 rule .language-switcher a
+  43 rule .language-switcher a.active
+  44 rule .install-button
+  45 rule .mobile-menu
+  46 rule .section
+  47 rule .section-muted,.section-dark
+  48 rule .section-dark
+  49 rule .section-heading
+  50 rule .section-heading .eyebrow
+  51 rule .section-heading h2
+  52 rule .section-heading>p:last-child:not(.eyebrow)
+  53 rule .section-dark .section-heading>p:last-child
+  54 rule .home-hero,.service-hero,.standard-hero
+  55 rule .hero-grid-glow
+  56 rule .home-hero-inner,.service-hero-inner
+  57 rule .home-hero-copy
+  58 rule .home-hero h1
+  59 rule .hero-lead
+  60 rule .hero-actions
+  61 rule .hero-contact-line
+  62 rule .hero-contact-line a
+  63 rule .hero-collage
+  64 rule .hero-image
+  65 rule .hero-image img
+  66 rule .hero-image-main figcaption
+  67 rule .hero-image-top
+  68 rule .hero-image-bottom
+  69 rule .proof-band
+  70 rule .proof-band>div
+  71 rule .proof-band strong,.proof-band span
+  72 rule .proof-band strong
+  73 rule .proof-band span
+  74 rule .direction-grid
+  75 rule .direction-card
+  76 rule .direction-card:after
+  77 rule .direction-card>img
+  78 rule .direction-card:hover>img
+  79 rule .direction-overlay
+  80 rule .direction-overlay>span
+  81 rule .direction-overlay h2
+  82 rule .direction-overlay p
+  83 rule .direction-overlay>span:last-child
+  84 rule .service-card-grid
+  85 rule .service-card
+  86 rule .service-card:hover
+  87 rule .service-index
+  88 rule .service-category
+  89 rule .service-card h3
+  90 rule .service-card p
+  91 rule .card-link
+  92 rule .experience-grid
+  93 rule .experience-grid figure
+  94 rule .experience-grid figure.wide
+  95 rule .experience-grid img
+  96 rule .experience-grid figure:hover img
+  97 rule .experience-grid figcaption
+  98 rule .experience-grid figcaption span
+  99 rule .process-rail
+ 100 rule .process-rail article
+ 101 rule .process-rail article:before
+ 102 rule .process-rail h2
+ 103 rule .process-rail p
+ 104 rule .procurement-banner
+ 105 rule .procurement-banner h2
+ 106 rule .procurement-banner p:not(.eyebrow)
+ 107 rule .contact-section
+ 108 rule .contact-section h2
+ 109 rule .contact-section p:last-child
+ 110 rule .contact-section-actions
+ 111 rule .standard-hero-inner,.service-hero-inner
+ 112 rule .standard-hero-inner
+ 113 rule .standard-hero h1
+ 114 rule .standard-hero .hero-lead
+ 115 rule .breadcrumbs
+ 116 rule .service-hero-inner
+ 117 rule .service-hero h1
+ 118 rule .service-hero-copy
+ 119 rule .service-price
+ 120 rule .service-price span
+ 121 rule .service-price strong
+ 122 rule .service-price p
+ 123 rule .service-hero-image
+ 124 rule .service-hero-image:after
+ 125 rule .service-hero-image img
+ 126 rule .service-hero-image figcaption
+ 127 rule .service-abstract
+ 128 rule .service-abstract span
+ 129 rule .service-abstract i,.service-abstract b
+ 130 rule .service-abstract i
+ 131 rule .service-abstract b
+ 132 rule .scope-grid
+ 133 rule .scope-grid article
+ 134 rule .scope-grid span
+ 135 rule .scope-grid p
+ 136 rule .outcome-panel,.evidence-callout
+ 137 rule .outcome-panel h2,.evidence-callout h2
+ 138 rule .outcome-panel>p,.evidence-callout>p
+ 139 rule .outcome-panel .eyebrow,.evidence-callout .eyebrow
+ 140 rule .faq-list
+ 141 rule .faq-list details
+ 142 rule .faq-list summary
+ 143 rule .faq-list summary::-webkit-details-marker
+ 144 rule .faq-list summary:after
+ 145 rule .faq-list details[open] summary:after
+ 146 rule .faq-list details p
+ 147 rule .split-story,.geography-layout,.procurement-layout,.files-layout,.article-body,.contacts-grid
+ 148 rule .split-story p:not(.eyebrow)
+ 149 rule .timeline
+ 150 rule .timeline article
+ 151 rule .timeline strong
+ 152 rule .timeline p
+ 153 rule .project-card-grid
+ 154 rule .project-card
+ 155 rule .project-card:hover
+ 156 rule .project-card img
+ 157 rule .project-card>div
+ 158 rule .project-card h2
+ 159 rule .project-detail
+ 160 rule .project-lead-image
+ 161 rule .project-lead-image img
+ 162 rule .verification-card,.file-safety-card
+ 163 rule .verification-card h2,.file-safety-card h2
+ 164 rule .verification-card p,.file-safety-card p
+ 165 rule .sector-grid,.factor-grid,.price-card-grid,.document-flow,.article-grid
+ 166 rule .sector-grid article,.factor-grid article,.price-card-grid article,.document-flow article,.article-card
+ 167 rule .sector-grid span,.factor-grid span,.price-card-grid span,.document-flow span,.article-card>span:first-child
+ 168 rule .sector-grid h2,.factor-grid h2,.price-card-grid h2,.document-flow h2,.article-card h2
+ 169 rule .sector-grid p,.factor-grid p,.price-card-grid p,.document-flow p,.article-card>p:not(.eyebrow)
+ 170 rule .price-card-grid article
+ 171 rule .price-card-grid strong
+ 172 rule .kazakhstan-panel
+ 173 rule .kazakhstan-panel strong
+ 174 rule .kazakhstan-panel span
+ 175 rule .prices-intro
+ 176 rule .evidence-callout
+ 177 rule .check-list
+ 178 rule .check-list li
+ 179 rule .check-list li:before
+ 180 rule .procurement-side,.article-aside
+ 181 rule .procurement-side>span
+ 182 rule .procurement-side h2,.article-aside h2
+ 183 rule .procurement-side p,.article-aside p
+ 184 rule .article-card
+ 185 rule .article-card:hover
+ 186 rule .article-card .card-link
+ 187 rule .article-copy
+ 188 rule .article-copy>p
+ 189 rule .article-copy h2
+ 190 rule .article-aside
+ 191 rule .contact-cards
+ 192 rule .contact-cards>a,.contact-cards>div
+ 193 rule .contact-cards>a span:first-child,.contact-cards>div span:first-child
+ 194 rule .contact-cards strong
+ 195 rule .contact-cards>a:hover
+ 196 rule .contact-form-panel
+ 197 rule .contact-form-panel h2
+ 198 rule .contact-form-panel>p:not(.eyebrow)
+ 199 rule .lead-form
+ 200 rule .form-grid
+ 201 rule .lead-form label
+ 202 rule .lead-form label>span
+ 203 rule .lead-form input,.lead-form select,.lead-form textarea,.search-page input
+ 204 rule .lead-form textarea
+ 205 rule .form-actions
+ 206 rule .form-actions p
+ 207 rule .legal-copy
+ 208 rule .legal-note
+ 209 rule .legal-copy section
+ 210 rule .legal-copy h2
+ 211 rule .legal-copy p
+ 212 rule .search-page form
+ 213 rule .search-results
+ 214 rule .search-results a
+ 215 rule .search-results h2
+ 216 rule .search-results p
+ 217 rule .search-results a>span
+ 218 rule .empty-state
+ 219 rule .sitemap-list
+ 220 rule .sitemap-list a
+ 221 rule .sitemap-list a:hover
+ 222 rule .file-safety-card .button
+ 223 rule .site-footer
+ 224 rule .footer-grid
+ 225 rule .footer-brand img
+ 226 rule .footer-brand p
+ 227 rule .site-footer h2
+ 228 rule .site-footer ul
+ 229 rule .site-footer li
+ 230 rule .site-footer a:hover
+ 231 rule .footer-legal
+ 232 rule .footer-legal a
+ 233 rule .footer-bottom
+ 234 rule .language-entry
+ 235 rule .language-entry-glow
+ 236 rule .language-entry-inner
+ 237 rule .language-entry-inner>img
+ 238 rule .language-entry h1
+ 239 rule .language-entry-inner>div:nth-child(3)>p:last-child
+ 240 rule .language-entry-grid
+ 241 rule .language-entry-grid a
+ 242 rule .language-entry-grid a:hover
+ 243 rule .language-entry-grid a>span
+ 244 rule .language-entry-grid h2
+ 245 rule .language-entry-grid p
+ 246 rule .language-entry-grid strong
+ 247 rule .language-entry-contact
+ 248 rule .not-found-page
+ 249 rule .not-found-page>img
+ 250 rule .not-found-page h1
+ 251 rule .not-found-page .hero-actions
+ 252 at @media (max-width:1180px)
+ 253 at @media (max-width:820px)
+ 254 at @media (max-width:580px)
+ 255 at @media (prefers-reduced-motion:reduce)
+ 256 at @media print
+ 257 rule :root
+ 258 rule html,body
+ 259 rule body
+ 260 rule h1,h2,h3
+ 261 rule p
+ 262 rule button,summary,a
+ 263 rule .eyebrow
+ 264 rule .eyebrow:before
+ 265 rule .section-dark .eyebrow,.home-hero .eyebrow,.service-hero .eyebrow,.standard-hero .eyebrow,.language-entry .eye
+ 266 rule .section-dark .eyebrow
+ 267 rule .button
+ 268 rule .button-primary
+ 269 rule .button-primary:hover
+ 270 rule .button-secondary
+ 271 rule .button-secondary:hover
+ 272 rule .button-small
+ 273 rule .site-header
+ 274 rule .header-inner
+ 275 rule .brand
+ 276 rule .desktop-nav
+ 277 rule .desktop-nav a:after
+ 278 rule .search-link
+ 279 rule .language-switcher a
+ 280 rule .language-switcher a.active
+ 281 rule .install-button
+ 282 rule .home-hero,.service-hero,.standard-hero
+ 283 rule .home-hero:before,.service-hero:before,.standard-hero:before
+ 284 rule .home-hero:before
+ 285 rule .service-hero:before
+ 286 rule .standard-hero:before
+ 287 rule .home-hero:after,.service-hero:after,.standard-hero:after
+ 288 rule .hero-grid-glow
+ 289 rule .home-hero,.home-hero-inner,.service-hero-inner
+ 290 rule .home-hero-inner
+ 291 rule .home-hero h1,.service-hero h1,.standard-hero h1
+ 292 rule .home-hero h1
+ 293 rule .hero-lead,.standard-hero .hero-lead
+ 294 rule .hero-contact-line
+ 295 rule .hero-contact-line a
+ 296 rule .hero-image
+ 297 rule .hero-image-main
+ 298 rule .hero-image-main figcaption
+ 299 rule .hero-image-top
+ 300 rule .hero-image-bottom
+ 301 rule .proof-band
+ 302 rule .proof-band:after
+ 303 rule .proof-band>div
+ 304 rule .motion-rail-section
+ 305 rule .motion-rail-heading
+ 306 rule .motion-rail-heading strong
+ 307 rule .motion-rail-viewport
+ 308 rule .motion-rail-track
+ 309 rule .motion-rail-group
+ 310 rule .motion-card
+ 311 rule a.motion-card
+ 312 rule a.motion-card:hover,a.motion-card:focus-visible
+ 313 rule .motion-card img
+ 314 rule .motion-card>span
+ 315 rule .motion-card small
+ 316 rule .motion-card b
+ 317 rule .motion-card>span:last-child
+ 318 rule .motion-rail-section:hover .motion-rail-track,.motion-rail-section:focus-within .motion-rail-track
+ 319 at @keyframes motion-rail-left
+ 320 rule .section
+ 321 rule .section:not(.section-dark):after
+ 322 rule .section-muted
+ 323 rule .section-heading h2
+ 324 rule .direction-card
+ 325 rule .direction-card:before
+ 326 rule .service-card,.scope-grid article,.project-card,.sector-grid article,.factor-grid article,.price-card-grid art
+ 327 rule .service-card:before,.scope-grid article:before,.sector-grid article:before,.factor-grid article:before,.price
+ 328 rule .scope-grid article,.sector-grid article,.factor-grid article,.price-card-grid article,.document-flow article,
+ 329 rule .service-card:hover,.project-card:hover,.article-card:hover
+ 330 rule .service-category,.service-index,.card-link
+ 331 rule .service-index
+ 332 rule .process-rail article
+ 333 rule .process-rail article:before
+ 334 rule .experience-section h2
+ 335 rule .experience-grid figure
+ 336 rule .procurement-banner
+ 337 rule .procurement-banner:after
+ 338 rule .procurement-banner>*
+ 339 rule .procurement-banner h2,.outcome-panel h2,.evidence-callout h2
+ 340 rule .outcome-panel,.evidence-callout
+ 341 rule .contact-form-panel,.verification-card,.file-safety-card
+ 342 rule .faq-list details
+ 343 rule .faq-list details[open]
+ 344 rule .kazakhstan-panel,.procurement-side,.article-aside
+ 345 rule .standard-hero-inner
+ 346 rule .standard-hero h1
+ 347 rule .breadcrumbs
+ 348 rule .breadcrumbs a:hover
+ 349 rule .service-hero-inner
+ 350 rule .service-hero h1
+ 351 rule .service-hero-image
+ 352 rule .service-abstract
+ 353 rule .service-abstract span
+ 354 rule .service-abstract i,.service-abstract b
+ 355 rule .whatsapp-float
+ 356 rule .whatsapp-float:before
+ 357 rule .whatsapp-float:hover,.whatsapp-float:focus-visible
+ 358 rule .whatsapp-float-label
+ 359 rule .whatsapp-float:hover .whatsapp-float-label,.whatsapp-float:focus-visible .whatsapp-float-label
+ 360 at @keyframes whatsapp-pulse
+ 361 rule .language-entry
+ 362 rule .language-entry-glow
+ 363 rule .language-entry h1
+ 364 rule .language-entry-inner>div:nth-child(3)>p:last-child
+ 365 rule .language-entry-grid a
+ 366 rule .language-entry-grid a:hover
+ 367 rule .language-entry-grid h2
+ 368 rule .language-entry-grid p,.language-entry-contact
+ 369 rule .not-found-page
+ 370 rule .not-found-page h1
+ 371 rule .not-found-page>p:not(.eyebrow)
+ 372 rule .footer-brand img
+ 373 at @media (max-width:1180px)
+ 374 at @media (max-width:820px)
+ 375 at @media (max-width:580px)
+ 376 at @media (prefers-reduced-motion:reduce)
+ 377 at @media print
+ 378 rule :root
+ 379 rule html
+ 380 rule body
+ 381 rule button,input,select,textarea
+ 382 rule ::selection
+ 383 rule a,button,summary,input
+ 384 rule :where(a,button,summary,input,select,textarea):focus-visible
+ 385 rule .site-header
+ 386 rule .site-header.is-scrolled
+ 387 rule .header-inner
+ 388 rule .brand
+ 389 rule .brand img
+ 390 rule .desktop-nav
+ 391 rule .desktop-nav a
+ 392 rule .desktop-nav a:after
+ 393 rule .desktop-nav a:hover:after,.desktop-nav a.active:after
+ 394 rule .header-actions
+ 395 rule .header-phone
+ 396 rule .language-switcher
+ 397 rule .language-switcher a
+ 398 rule .language-switcher a+a:before
+ 399 rule .language-switcher a.active
+ 400 rule .button
+ 401 rule .button-primary
+ 402 rule .button-primary:hover
+ 403 rule .button-small
+ 404 rule .mobile-header-tools,.mobile-menu
+ 405 rule .premium-home
+ 406 rule .as-cinematic-hero
+ 407 rule .premium-hero-media,.premium-hero-poster,.premium-hero-video
+ 408 rule .premium-hero-media
+ 409 rule .premium-hero-poster
+ 410 rule .premium-hero-poster img,.premium-hero-video
+ 411 rule .premium-hero-video
+ 412 rule .premium-hero-media.is-ready:not(.is-fallback) .premium-hero-video
+ 413 rule .hero-pause
+ 414 rule .as-hero-scrim
+ 415 rule .as-hero-inner
+ 416 rule .as-hero-copy
+ 417 rule .as-eyebrow,.premium-home .section-heading .eyebrow
+ 418 rule .as-eyebrow:after
+ 419 rule .as-hero-copy h1
+ 420 rule .as-hero-lead
+ 421 rule .as-hero-actions
+ 422 rule .as-hero-actions .button
+ 423 rule .as-text-link
+ 424 rule .as-text-link span
+ 425 rule .as-text-link:hover span
+ 426 rule .as-text-link.dark
+ 427 rule .as-quick-request
+ 428 rule .as-quick-request input
+ 429 rule .as-quick-request input::placeholder
+ 430 rule .as-quick-request button
+ 431 rule .as-quick-request button:hover
+ 432 rule .as-proof-strip
+ 433 rule .as-proof-strip article
+ 434 rule .as-proof-strip article+article
+ 435 rule .as-proof-strip article>span
+ 436 rule .as-proof-strip strong
+ 437 rule .as-proof-strip small
+ 438 rule .as-bank-proof
+ 439 rule .as-bank-proof>p
+ 440 rule .as-bank-proof>div
+ 441 rule .as-bank-proof>div span
+ 442 rule .as-bank-proof>div span+span
+ 443 rule .as-bank-proof>div span+span:before
+ 444 rule .as-bank-proof>small
+ 445 rule .as-cycle-section
+ 446 rule .as-cycle-intro h2
+ 447 rule .as-cycle-intro>p:last-child
+ 448 rule .as-stage-track
+ 449 rule .as-stage-card
+ 450 rule .as-stage-card>img
+ 451 rule .as-stage-card:hover>img
+ 452 rule .as-stage-card>div
+ 453 rule .as-stage-card>div:before
+ 454 rule .as-stage-card span
+ 455 rule .as-stage-card h3
+ 456 rule .as-stage-card p
+ 457 rule .section
+ 458 rule .section>:where(.section-heading,.direction-grid,.service-card-grid,.process-rail,.scope-grid,.faq-list,.timel
+ 459 rule .section-heading
+ 460 rule .section-heading h2,.standard-hero h1,.service-hero h1
+ 461 rule .section-heading h2
+ 462 rule .section-heading>p:last-child
+ 463 rule .as-problem-solution
+ 464 rule .as-problem-copy h2,.as-solution-panel h2
+ 465 rule .as-problem-copy>p:last-child
+ 466 rule .as-solution-panel
+ 467 rule .as-solution-panel ul
+ 468 rule .as-solution-panel li
+ 469 rule .as-solution-panel li:before
+ 470 rule .motion-rail-section
+ 471 rule .motion-rail-heading
+ 472 rule .motion-rail-heading span
+ 473 rule .motion-rail-track
+ 474 rule .motion-card
+ 475 rule .motion-card img
+ 476 rule .motion-card small
+ 477 rule .motion-card b
+ 478 rule .service-card-grid
+ 479 rule .service-card
+ 480 rule .service-card.text-only,.service-card.text-only .service-card-body
+ 481 rule .service-card:before
+ 482 rule .service-card:hover
+ 483 rule .service-card-media
+ 484 rule .service-card-media:after
+ 485 rule .service-card-media>img
+ 486 rule .service-card:hover .service-card-media>img
+ 487 rule .service-card-media>svg
+ 488 rule .service-card-body
+ 489 rule .service-card-body .service-index
+ 490 rule .service-card-body .service-category
+ 491 rule .service-card-body h3,.service-card-body p,.service-card-body .card-link
+ 492 rule .service-card-body h3
+ 493 rule .service-card-body p
+ 494 rule .service-card-body .card-link
+ 495 rule .experience-section
+ 496 rule .experience-grid figure
+ 497 rule .experience-grid figure img
+ 498 rule .experience-grid figcaption
+ 499 rule .experience-grid figcaption>span
+ 500 rule .experience-grid figcaption strong
+ 501 rule .experience-grid figcaption p
+ 502 rule .as-scale-section
+ 503 rule .as-scale-grid
+ 504 rule .as-scale-grid article
+ 505 rule .as-scale-grid strong
+ 506 rule .as-scale-grid h3
+ 507 rule .as-scale-grid p
+ 508 rule .procurement-banner
+ 509 rule .contact-section
+ 510 rule .standard-hero
+ 511 rule .standard-hero:before
+ 512 rule .standard-hero:after
+ 513 rule .standard-hero-inner
+ 514 rule .standard-hero h1
+ 515 rule .standard-hero .hero-lead
+ 516 rule .standard-hero .breadcrumbs,.standard-hero .breadcrumbs a
+ 517 rule .standard-hero .eyebrow,.service-hero .eyebrow
+ 518 rule .service-hero
+ 519 rule .service-hero-inner
+ 520 rule .service-hero h1
+ 521 rule .service-hero .hero-lead
+ 522 rule .service-hero .breadcrumbs,.service-hero .breadcrumbs a
+ 523 rule .service-hero-image
+ 524 rule .service-hero-image img
+ 525 rule .service-price
+ 526 rule .service-price span,.service-price p
+ 527 rule .service-price strong
+ 528 rule .service-decision-section
+ 529 rule .service-decision-copy h2
+ 530 rule .service-decision-copy>p:last-child
+ 531 rule .service-decision-grid
+ 532 rule .service-decision-grid article
+ 533 rule .service-decision-grid article>span,.project-story-grid article>span
+ 534 rule .service-decision-grid h3
+ 535 rule .service-decision-grid p
+ 536 rule .project-detail
+ 537 rule .project-lead-image
+ 538 rule .project-lead-image img
+ 539 rule .project-story-grid
+ 540 rule .project-story-grid article
+ 541 rule .project-story-grid h2
+ 542 rule .project-story-grid p
+ 543 rule .project-evidence-note
+ 544 rule .project-evidence-note>p:last-child
+ 545 rule .whatsapp-float
+ 546 rule .whatsapp-float:hover
+ 547 rule .site-footer
+ 548 rule .motion-ready [data-reveal].reveal-ready
+ 549 rule .motion-ready [data-reveal].reveal-ready.is-visible
+ 550 at @media (max-width:1180px)
+ 551 at @media (max-width:900px)
+ 552 at @media (max-width:700px)
+ 553 at @media (max-width:390px)
+ 554 at @media (prefers-reduced-motion:reduce)
+ 555 rule :root
+ 556 rule :where(a,button,summary,input,select,textarea):focus-visible
+ 557 rule .section-dark :where(a,button,summary,input,select,textarea):focus-visible,.as-cinematic-hero :where(a,button,
+ 558 rule .site-header
+ 559 rule .site-header.is-scrolled
+ 560 rule .desktop-nav a:after
+ 561 rule .language-switcher
+ 562 rule .language-switcher a.active
+ 563 rule .button-primary,.as-quick-request button
+ 564 rule .button-primary:hover,.as-quick-request button:hover
+ 565 rule .button-dark
+ 566 rule .eyebrow:before
+ 567 rule .premium-hero-media
+ 568 rule .premium-hero-poster img,.premium-hero-video
+ 569 rule .premium-hero-video
+ 570 rule .as-hero-scrim
+ 571 rule .as-hero-inner
+ 572 rule .as-eyebrow
+ 573 rule .premium-home .section-heading .eyebrow
+ 574 rule .as-text-link
+ 575 rule .as-text-link.dark
+ 576 rule .as-quick-request
+ 577 rule .as-proof-strip
+ 578 rule .as-proof-strip article+article
+ 579 rule .proof-metric-icon
+ 580 rule .hero-pause
+ 581 rule .hero-pause:hover
+ 582 rule .as-bank-proof>div span+span:before,.as-solution-panel li:before
+ 583 rule .as-stage-card span,.motion-rail-heading span,.motion-card small,.service-card-body .service-index,.experience
+ 584 rule .experience-section .section-heading .eyebrow,.experience-section .experience-grid figcaption>span,.standard-h
+ 585 rule .as-cycle-section,.experience-section,.site-footer
+ 586 rule .whatsapp-float
+ 587 rule .whatsapp-float:before
+ 588 rule .whatsapp-float:hover,.whatsapp-float:focus-visible
+ 589 rule .as-bank-proof
+ 590 rule .as-bank-logo-rail,.as-bank-logo-list,.as-bank-logos
+ 591 rule .as-bank-proof>div.as-bank-logo-list,.as-bank-proof>div.as-bank-logos
+ 592 rule .as-bank-logo-item,.as-bank-logo-list>a,.as-bank-logo-list>figure,.as-bank-logos>a,.as-bank-logos>figure,.as-b
+ 593 rule .as-bank-logo-item img,.as-bank-logo-list img,.as-bank-logos img,.as-bank-proof>div img
+ 594 rule .as-bank-logo-item figcaption,.as-bank-logo-list figcaption,.as-bank-logos figcaption
+ 595 rule .as-bank-logo-item:hover,.as-bank-logo-list>a:hover,.as-bank-logos>a:hover
+ 596 rule .as-bank-proof>div>span+span:before
+ 597 rule .as-bank-proof>small,.as-bank-logo-note
+ 598 rule .experience-grid figure,.service-hero-image,.project-lead-image,.photo-figure
+ 599 rule .experience-grid figure:after,.service-hero-image:after,.project-lead-image:after,.photo-figure:after
+ 600 rule .experience-grid figcaption,.service-hero-image figcaption,.project-lead-image figcaption,.photo-caption
+ 601 rule .experience-grid figcaption strong,.photo-caption strong
+ 602 rule .experience-grid figcaption p,.photo-caption p
+ 603 rule .service-hero-image figcaption
+ 604 rule html.quote-dialog-open,html.quote-dialog-open body
+ 605 rule .quote-dialog
+ 606 rule .quote-dialog:not([open])
+ 607 rule .quote-dialog::backdrop
+ 608 rule .quote-dialog-shell
+ 609 rule .quote-dialog-header
+ 610 rule .quote-dialog-header>div
+ 611 rule .quote-dialog-header>div>span
+ 612 rule .quote-dialog-header strong
+ 613 rule .quote-dialog-close
+ 614 rule .quote-dialog-close:hover
+ 615 rule .quote-dialog-close span
+ 616 rule .project-brief-form
+ 617 rule .quote-dialog .project-brief-form
+ 618 rule .form-honeypot
+ 619 rule .project-brief-intro
+ 620 rule .project-brief-intro .eyebrow
+ 621 rule .project-brief-intro h2
+ 622 rule .project-brief-intro>p:last-child
+ 623 rule .quote-progress
+ 624 rule .quote-progress li
+ 625 rule .quote-progress li:not(:last-child):after
+ 626 rule .quote-progress li>span
+ 627 rule .quote-progress small
+ 628 rule .quote-progress li.active,.quote-progress li.done
+ 629 rule .quote-progress li.active>span,.quote-progress li.done>span
+ 630 rule .quote-progress li.done:after
+ 631 rule .quote-step
+ 632 rule .quote-step.is-active
+ 633 at @keyframes quote-step-enter
+ 634 rule .quote-step fieldset
+ 635 rule .quote-step legend
+ 636 rule .quote-category-grid
+ 637 rule .quote-category-grid label
+ 638 rule .quote-category-grid label:hover
+ 639 rule .quote-category-grid label.selected
+ 640 rule .quote-category-grid label:has(input:focus-visible)
+ 641 rule .quote-category-grid input
+ 642 rule .quote-category-grid svg
+ 643 rule .quote-category-grid label>span
+ 644 rule .quote-field-grid
+ 645 rule .field
+ 646 rule .field>span
+ 647 rule .field>small
+ 648 rule .project-brief-form :where(input:not([type=radio]):not([type=checkbox]),select,textarea)
+ 649 rule .project-brief-form :where(input:not([type=radio]):not([type=checkbox]),select,textarea):hover
+ 650 rule .project-brief-form :where(input:not([type=radio]):not([type=checkbox]),select,textarea):focus
+ 651 rule .project-brief-form textarea
+ 652 rule .project-brief-form input[type=file]
+ 653 rule .project-brief-form input[type=file]::file-selector-button
+ 654 rule .quote-consent
+ 655 rule .quote-consent input
+ 656 rule .quote-response-note
+ 657 rule .quote-response-note p
+ 658 rule .quote-response-note strong
+ 659 rule .quote-response-note p>span
+ 660 rule .quote-form-actions
+ 661 rule .project-brief-form:not(.is-compact) .quote-form-actions
+ 662 at @media (max-width:1100px)
+ 663 at @media (max-width:900px)
+ 664 at @media (max-width:700px)
+ 665 at @media (max-width:430px)
+ 666 at @media (prefers-reduced-motion:reduce)
+ 667 at @supports not ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px)))
+ 668 rule .as-bank-proof.as-bank-logo-rail
+ 669 rule .as-bank-logo-copy
+ 670 rule .as-bank-logo-copy h2
+ 671 rule .as-bank-logo-copy>p:last-child
+ 672 rule .as-bank-proof>div.as-bank-logo-list
+ 673 rule .as-bank-logo-item
+ 674 rule .as-bank-logo-item>span
+ 675 rule .as-bank-logo-item strong
+ 676 rule .as-bank-logo-item small
+ 677 rule .as-bank-trademark-note
+ 678 rule .quote-page-section
+ 679 rule .quote-page-context
+ 680 rule .quote-page-context h2
+ 681 rule .quote-page-context>p
+ 682 rule .project-fact-panel
+ 683 rule .project-fact-panel h2
+ 684 rule .project-fact-panel .check-list
+ 685 at @media (max-width:900px)
+ 686 at @media (max-width:700px)
+ 687 comment /* === custom overrides (2026-08-06): lang capsule, no pause btn, no dark circle === */
+ 688 rule .language-switcher
+ 689 rule .language-switcher a
+ 690 rule .language-switcher a+a:before
+ 691 rule .hero-pause
+ 692 rule .home-hero:after,.service-hero:after,.standard-hero:after
+ 693 rule .service-index
+ 694 rule .desktop-nav a,.header-phone
+ 695 rule .whatsapp-float
+ 696 rule .whatsapp-float:before
+ 697 rule .whatsapp-float:hover,.whatsapp-float:focus-visible
+ 698 rule a.button[href^="https://wa.me"]
+ 699 rule a.button[href^="https://wa.me"]:hover,a.button[href^="https://wa.me"]:focus-visible
+ 700 rule .mobile-menu-panel
+ 701 rule .service-hero-image:after,.project-lead-image:after,.photo-figure:after
+ 702 rule .service-hero-image
+ 703 rule .as-bank-logo-item img,.as-bank-logo-list img,.as-bank-logos img,.as-bank-proof>div img
+ 704 rule .as-bank-logo-item img[src="/brands/bank-centercredit.svg"],.as-bank-logo-item img[src="/brands/bereke-bank.sv

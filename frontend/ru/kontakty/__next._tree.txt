@@ -1,3 +1,0 @@
-:HL["/_next/static/chunks/0.c7rya17m5lt.css","style"]
-:HL["/images/a-service-logo-v2-transparent.png","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":0,"slots":{"children":{"name":"locale","param":{"type":"d","key":"ru","siblings":null},"prefetchHints":16,"slots":{"children":{"name":"slug","param":{"type":"c","key":"kontakty","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"Miwe_bea4y_urBcXuLTU0"}
