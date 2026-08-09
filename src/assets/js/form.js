@@ -135,8 +135,41 @@
     };
   }
 
+  /* ---------------- Отправка заявки в CRM (crm.a-service.asia) ----------------
+     Форма уходит в собственный бэкенд A-SERVICE; после успеха — страница
+     «Спасибо», как и раньше. */
+  function bindSubmit(form) {
+    form.addEventListener('submit', function (e) {
+      var cfg = window.AS_CONFIG || {};
+      var api = (cfg.apiUrl || '').replace(/\/$/, '');
+      if (!api) return; // без API работаем как обычная форма
+      e.preventDefault();
+
+      var submitBtn = form.querySelector('button[type="submit"]');
+      if (submitBtn) submitBtn.disabled = true;
+
+      var data = new FormData(form);
+      data.delete('form-name');
+      data.delete('bot-field');
+      if (window.asVisitorId) data.set('visitorId', window.asVisitorId());
+
+      fetch(api + '/public/leads', { method: 'POST', body: data })
+        .then(function (res) {
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          window.location.href = form.getAttribute('action') || '/';
+        })
+        .catch(function () {
+          if (submitBtn) submitBtn.disabled = false;
+          alert(LANG === 'kk'
+            ? 'Өтінімді жіберу мүмкін болмады. Бізге қоңырау шалыңыз немесе WhatsApp-қа жазыңыз.'
+            : 'Не удалось отправить заявку. Позвоните нам или напишите в WhatsApp.');
+        });
+    });
+  }
+
   /* формы на страницах (Контакты, Запрос КП) */
   document.querySelectorAll('form.project-brief-form').forEach(function (form) {
+    bindSubmit(form);
     if (!form.closest('dialog')) initWizard(form);
   });
 
@@ -165,6 +198,7 @@
     }
     if (!dialog.open) dialog.showModal();
     doc().classList.add('quote-dialog-open');
+    if (window.asSendEvent) window.asSendEvent('QUOTE_OPEN');
   }
 
   /* Любая кнопка «Получить расчёт/предложение» вне форм открывает диалог */

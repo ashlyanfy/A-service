@@ -22,9 +22,20 @@
 │   ├── assets/           # site.css (склейка слоёв), js, search-*.json
 │   ├── images/ icons/ video/ brands/   # медиа (копируются как есть)
 │   └── _redirects, _headers, sitemap.xml, robots.txt, sw.js, манифесты PWA
-├── backend/  admin/  # зарезервировано (см. README внутри)
+├── backend/          # FastAPI CRM API: заявки, аналитика, контент, SEO (см. README внутри)
+├── admin/            # Next.js админка crm.a-service.asia (см. README внутри)
 └── netlify.toml      # publish = "frontend"
 ```
+
+## Связка с CRM
+
+Лендинг связан с админкой через backend:
+- форма «Получить расчёт» отправляет заявки в CRM (`/public/leads`);
+- аналитика посещений и кликов уходит в CRM (`/public/events`);
+- SEO и редактируемые блоки страниц подтягиваются из CRM поверх статики
+  (`src/assets/js/cms.js`);
+- адрес API задаётся при сборке: `ASERVICE_API_URL=https://api.a-service.asia python src/build.py`
+  (по умолчанию http://localhost:8010 для разработки).
 
 ## Сборка и запуск
 

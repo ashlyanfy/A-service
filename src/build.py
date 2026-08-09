@@ -38,7 +38,15 @@ HEAD_BOTTOM = (
     '<link rel="icon" href="/icons/icon-192-v2.png" sizes="192x192" type="image/png"/>'
     '<link rel="apple-touch-icon" href="/icons/apple-touch-icon-v2.png"/>'
 )
-SCRIPTS = '<script defer src="/assets/js/main.js?v={js_v}"></script><script defer src="/assets/js/form.js?v={js_v}"></script>'
+# Адрес API CRM: переопределяется переменной окружения при прод-сборке
+API_URL = os.environ.get('ASERVICE_API_URL', 'http://localhost:8010')
+
+SCRIPTS = (
+    '<script>window.AS_CONFIG={{apiUrl:"{api_url}"}}</script>'
+    '<script defer src="/assets/js/main.js?v={js_v}"></script>'
+    '<script defer src="/assets/js/cms.js?v={js_v}"></script>'
+    '<script defer src="/assets/js/form.js?v={js_v}"></script>'
+)
 SEARCH_SCRIPT = '<script defer src="/assets/js/search.js?v={js_v}"></script>'
 
 VERSIONS = {'css_v': '0', 'js_v': '0'}
@@ -159,7 +167,8 @@ def render_page(fm, lang, slug, tpl):
     self_url = page_url(lang, slug)
     header = render_header(tpl['header'], lang, self_url, fm.get('pair') or '/%s/' % ('kk' if lang == 'ru' else 'ru'), fm.get('nav'))
     head = (HEAD_TOP.format(lang=lang, css_v=VERSIONS['css_v']) + '\n' + fm['head'] + '\n' + HEAD_BOTTOM +
-            (SCRIPTS + (SEARCH_SCRIPT if slug == SEARCH_SLUGS[lang] else '')).format(js_v=VERSIONS['js_v']))
+            (SCRIPTS + (SEARCH_SCRIPT if slug == SEARCH_SLUGS[lang] else '')).format(
+                js_v=VERSIONS['js_v'], api_url=API_URL))
     jsonld = tpl['jsonld'] + ('\n' + fm['jsonld'] if fm['jsonld'] else '')
     skip = ('<a class="skip-link" href="#main-content">Перейти к содержанию</a>' if lang == 'ru'
             else '<a class="skip-link" href="#main-content">Мазмұнға өту</a>')
