@@ -25,6 +25,9 @@ ADMIN_PASSWORD = os.environ.get("SEED_ADMIN_PASSWORD", "ChangeMe123!")
 
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 CONTENT_DIR = os.path.join(REPO, "src", "content")
+# Слепок страниц лендинга, лежащий рядом с бэкендом: в контейнере (Railway)
+# папки src/content нет, поэтому сид читает этот файл.
+PAGES_JSON = os.path.join(os.path.dirname(__file__), "data", "pages.json")
 
 # Редактируемые блоки главной страницы (тексты hero и контакты показываются
 # на лендинге через content.js — см. frontend/assets/js/cms.js).
@@ -68,10 +71,12 @@ DEFAULT_SETTINGS = [
 
 
 def read_landing_pages() -> list[dict]:
-    """Извлекает slug/title/description всех страниц лендинга из src/content."""
+    """slug/title/description всех страниц лендинга: из src/content, иначе из data/pages.json."""
     pages: list[dict] = []
     if not os.path.isdir(CONTENT_DIR):
-        print(f"! content dir not found: {CONTENT_DIR} — страницы не загружены", file=sys.stderr)
+        if os.path.isfile(PAGES_JSON):
+            return json.load(open(PAGES_JSON, encoding="utf-8"))
+        print(f"! ни {CONTENT_DIR}, ни {PAGES_JSON} не найдены — страницы не загружены", file=sys.stderr)
         return pages
 
     for lang in ("ru", "kk"):

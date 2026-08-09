@@ -1,3 +1,4 @@
+import re
 from functools import lru_cache
 
 from pydantic import model_validator
@@ -50,6 +51,22 @@ class Settings(BaseSettings):
     telegram_chat_ids: str = ""
 
     env: str = "development"
+
+    @model_validator(mode="after")
+    def _normalize_database_url(self) -> "Settings":
+        """Railway отдаёт DATABASE_URL как postgres:// или postgresql:// — оба варианта
+        уводят SQLAlchemy на синхронный драйвер psycopg2, которого в проекте нет.
+        Приводим к asyncpg, чтобы приложение поднималось с любым значением."""
+        url = self.database_url
+        if url.startswith("postgres://"):
+            url = "postgresql://" + url[len("postgres://"):]
+        if url.startswith("postgresql://"):
+            url = "postgresql+asyncpg://" + url[len("postgresql://"):]
+        # asyncpg не понимает параметр sslmode из строки подключения (это опция libpq)
+        if "+asyncpg" in url and "sslmode=" in url:
+            url = re.sub(r"[?&]sslmode=[^&]*", "", url)
+        object.__setattr__(self, "database_url", url)
+        return self
 
     @model_validator(mode="after")
     def _validate_secret_key(self) -> "Settings":
