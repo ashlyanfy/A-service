@@ -23,16 +23,16 @@
 │   ├── images/ icons/ video/ brands/   # медиа (копируются как есть)
 │   └── _redirects, _headers, sitemap.xml, robots.txt, sw.js, манифесты PWA
 ├── backend/          # FastAPI CRM API: заявки, аналитика, контент, SEO (см. README внутри)
-├── admin/            # Next.js админка crm.a-service.asia (см. README внутри)
+├── admin/            # Next.js админка admin.a-service.asia (см. README внутри)
 └── netlify.toml      # publish = "frontend"
 ```
 
-## Связка с CRM
+## Связка с админкой
 
-Лендинг связан с админкой через backend:
-- форма «Получить расчёт» отправляет заявки в CRM (`/public/leads`);
-- аналитика посещений и кликов уходит в CRM (`/public/events`);
-- SEO и редактируемые блоки страниц подтягиваются из CRM поверх статики
+Лендинг связан с админкой (admin.a-service.asia) через backend:
+- форма «Получить расчёт» отправляет заявки в админку (`/public/leads`);
+- аналитика посещений и кликов уходит в админку (`/public/events`);
+- SEO и редактируемые блоки страниц подтягиваются из админки поверх статики
   (`src/assets/js/cms.js`);
 - адрес API задаётся при сборке: `ASERVICE_API_URL=https://api.a-service.asia python src/build.py`
   (по умолчанию http://localhost:8010 для разработки).
@@ -58,9 +58,11 @@ python -m http.server 8734 --directory frontend
 
 ## Формы
 
-Netlify Forms: форма `a-service-project-brief` (диалог на каждой странице + встроенная
-на «Контактах» и «Запросе КП»). Трёхшаговый визард — `src/assets/js/form.js`,
-справочник категорий/подзадач там же.
+Форма «Получить расчёт» (диалог на каждой странице + встроенная на «Контактах»
+и «Запросе КП»). Трёхшаговый визард — `src/assets/js/form.js`, справочник
+категорий/подзадач там же. Заявки уходят в backend (`POST /public/leads`)
+и видны в админке; без доступного API форма не отправляется — адрес задаётся
+переменной `ASERVICE_API_URL` при сборке.
 
 ## История
 

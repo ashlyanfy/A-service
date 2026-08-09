@@ -48,10 +48,10 @@ export function Sidebar() {
         <div className="font-display text-lg font-extrabold tracking-tight">
           A-SERVICE
           <span className="ml-2 rounded-full bg-brand-700 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest">
-            CRM
+            Админка
           </span>
         </div>
-        <div className="mt-1 text-xs text-white/50">crm.a-service.asia</div>
+        <div className="mt-1 text-xs text-white/50">admin.a-service.asia</div>
       </div>
 
       <nav className="flex-1 space-y-1 px-3">

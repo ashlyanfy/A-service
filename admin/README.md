@@ -1,4 +1,4 @@
-# Admin — A-SERVICE CRM (crm.a-service.asia)
+# Admin — админка A-SERVICE (admin.a-service.asia)
 
 Next.js 14 (App Router) + TypeScript + Tailwind + React Query + Recharts.
 Дизайн — фирменный стиль A-SERVICE (фиолетовая палитра, Inter/Manrope).

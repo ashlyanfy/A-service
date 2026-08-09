@@ -16,7 +16,7 @@ class PushSubscriptionDelete(BaseModel):
 
 
 class TestNotificationRequest(BaseModel):
-    title: str = Field(default="A-SERVICE CRM", max_length=100)
+    title: str = Field(default="A-SERVICE · Админка", max_length=100)
     body: str = Field(default="Тестовое уведомление", max_length=500)
 
 

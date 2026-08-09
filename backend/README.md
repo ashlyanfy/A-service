@@ -1,7 +1,7 @@
-# Backend — A-SERVICE CRM API
+# Backend — A-SERVICE Admin API
 
 FastAPI + SQLAlchemy (async). Обслуживает лендинг a-service.asia
-и админку crm.a-service.asia.
+и админку admin.a-service.asia.
 
 ## Возможности
 

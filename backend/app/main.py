@@ -22,7 +22,7 @@ from app.routers import (
 MAX_BODY_SIZE = 12 * 1024 * 1024
 
 app = FastAPI(
-    title="A-SERVICE CRM API",
+    title="A-SERVICE Admin API",
     version="1.0.0",
     docs_url="/docs" if settings.env == "development" else None,
     redoc_url=None,

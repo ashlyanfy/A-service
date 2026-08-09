@@ -1,9 +1,9 @@
-/* A-SERVICE CRM service worker: web-push уведомления о новых заявках. */
+/* A-SERVICE Админка: service worker: web-push уведомления о новых заявках. */
 self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", (event) => event.waitUntil(self.clients.claim()));
 
 self.addEventListener("push", (event) => {
-  let data = { title: "A-SERVICE CRM", body: "", url: "/" };
+  let data = { title: "A-SERVICE · Админка", body: "", url: "/" };
   try {
     data = { ...data, ...event.data.json() };
   } catch (e) {

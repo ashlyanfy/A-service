@@ -4,7 +4,7 @@ import { Providers } from "./providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "A-SERVICE CRM",
+  title: "A-SERVICE · Админка",
   description: "Панель управления A-SERVICE: заявки, аналитика, контент, SEO.",
   manifest: "/manifest.webmanifest",
   robots: { index: false, follow: false },

@@ -19,15 +19,15 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 30
     refresh_token_expire_days: int = 30
 
-    # CORS: админка (crm.a-service.asia) + лендинг + локальная разработка
+    # CORS: админка (admin.a-service.asia) + лендинг + локальная разработка
     cors_origins: str = (
         "http://localhost:3000,http://localhost:8734,"
-        "https://crm.a-service.asia,https://a-service.asia,https://www.a-service.asia,"
+        "https://admin.a-service.asia,https://a-service.asia,https://www.a-service.asia,"
         "https://majestic-salmiakki-b87621.netlify.app"
     )
 
     # Админка (ссылки в письмах восстановления пароля)
-    admin_url: str = "https://crm.a-service.asia"
+    admin_url: str = "https://admin.a-service.asia"
 
     # Загрузка вложений заявок
     upload_dir: str = "uploads"
@@ -43,7 +43,7 @@ class Settings(BaseSettings):
     smtp_port: int = 587
     smtp_user: str = ""
     smtp_password: str = ""
-    smtp_from: str = "A-SERVICE CRM <no-reply@a-service.asia>"
+    smtp_from: str = "A-SERVICE <no-reply@a-service.asia>"
     smtp_use_tls: bool = True
 
     # Telegram-уведомления о новых заявках

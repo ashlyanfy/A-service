@@ -35,7 +35,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         <div className="mb-8 text-center text-white">
           <div className="font-display text-2xl font-extrabold">A-SERVICE</div>
-          <div className="mt-1 text-sm text-white/60">crm.a-service.asia</div>
+          <div className="mt-1 text-sm text-white/60">admin.a-service.asia</div>
         </div>
         <form onSubmit={onSubmit} className="card space-y-4 p-8">
           <h1 className="font-display text-xl font-bold">{t("login_title")}</h1>

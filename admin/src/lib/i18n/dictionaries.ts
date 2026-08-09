@@ -1,7 +1,7 @@
 export const dictionaries = {
   ru: {
     // общие
-    app_name: "A-SERVICE CRM",
+    app_name: "A-SERVICE · Админка",
     loading: "Загрузка…",
     save: "Сохранить",
     saving: "Сохраняем…",
@@ -25,7 +25,7 @@ export const dictionaries = {
     nav_logout: "Выйти",
 
     // вход
-    login_title: "Вход в A-SERVICE CRM",
+    login_title: "Вход в админку A-SERVICE",
     login_email: "Email",
     login_password: "Пароль",
     login_submit: "Войти",
@@ -208,7 +208,7 @@ export const dictionaries = {
     settings_site_hint: "Телефон и email, показываемые на лендинге",
   },
   kk: {
-    app_name: "A-SERVICE CRM",
+    app_name: "A-SERVICE · Әкімші панелі",
     loading: "Жүктелуде…",
     save: "Сақтау",
     saving: "Сақталуда…",
@@ -230,7 +230,7 @@ export const dictionaries = {
     nav_settings: "Баптаулар",
     nav_logout: "Шығу",
 
-    login_title: "A-SERVICE CRM жүйесіне кіру",
+    login_title: "A-SERVICE әкімші панеліне кіру",
     login_email: "Email",
     login_password: "Құпиясөз",
     login_submit: "Кіру",
