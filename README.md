@@ -1,4 +1,4 @@
-# A-SERVICE — сайт a-service.kz
+# A-SERVICE — сайт a-service.asia
 
 Корпоративный сайт A-SERVICE (Казахстан): монтаж/демонтаж банкоматов, покраска,
 козырьки, корпоративная логистика. Два языка: русский (`/ru/`) и казахский (`/kk/`).
@@ -13,7 +13,7 @@
 Сайт и API живут на одном домене: бэкенд раздаёт собранную статику из `frontend/`,
 а форма и аналитика бьют в `/public/...` того же домена — без CORS и отдельного
 веб-сервера. Адрес сервиса: `https://artistic-serenity-production-bbc1.up.railway.app`
-(после привязки — `https://a-service.kz`).
+(после привязки — `https://a-service.asia`).
 
 Сайт — чистая статика (HTML/CSS/JS без фреймворков), собирается из `src/` в `frontend/`.
 
@@ -48,7 +48,7 @@
 | Переменная          | По умолчанию           | Зачем                                        |
 |---------------------|------------------------|----------------------------------------------|
 | `ASERVICE_API_URL`  | пусто = тот же домен   | адрес CRM; задавать только при раздельном запуске (`http://localhost:8010`) |
-| `ASERVICE_SITE_URL` | `https://a-service.kz` | канонический домен для `sitemap.xml`/`robots.txt` |
+| `ASERVICE_SITE_URL` | `https://a-service.asia` | канонический домен для `sitemap.xml`/`robots.txt` |
 | `ASERVICE_GA_ID`    | пусто                  | поток Google Analytics 4 (`G-XXXXXXXXXX`); пусто — GA не подключается |
 
 ```bash
@@ -126,4 +126,4 @@ python src/build.py && python -m http.server 8734 --directory frontend
 контента в RSC-payload). Переведён на чистую статику без изменения дизайна;
 исходники старой сборки — в git-истории. В августе 2026 переехал с Netlify на
 Railway: `netlify.toml`, `_redirects` и `_headers` убраны, сайт раздаёт сам
-backend, домен `*.netlify.app` заменён на `a-service.kz`.
+backend, домен `*.netlify.app` заменён на `a-service.asia`.

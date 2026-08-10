@@ -85,7 +85,9 @@ async def health() -> dict:
 
 
 # Статика сайта монтируется последней: маршруты API объявлены выше и имеют приоритет.
-if not mount_site(app):
+if mount_site(app):
+    print(f"[static] сайт раздаётся из {STATIC_DIR}")
+else:
     print(
         f"[static] папка сборки не найдена: {STATIC_DIR}. Поднят только API. "
         "Соберите сайт (python src/build.py) и запускайте сервис из корня репозитория."

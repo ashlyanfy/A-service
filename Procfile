@@ -1,1 +1,1 @@
-web: if [ -f src/build.py ]; then python src/build.py || echo '[build] site not rebuilt, using committed frontend/'; fi; if [ -d backend ]; then cd backend; fi; python -m app.seed && exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}
+web: if [ -f src/build.py ]; then python src/build.py || echo '[start] site not rebuilt, using committed frontend/'; fi; if [ -d backend ]; then cd backend; fi; python -m app.seed || echo '[start] seed failed, API may return errors until DB is ready'; exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}

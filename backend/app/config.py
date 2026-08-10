@@ -1,4 +1,5 @@
 import re
+import secrets
 from functools import lru_cache
 
 from pydantic import model_validator
@@ -19,12 +20,11 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 30
     refresh_token_expire_days: int = 30
 
-    # CORS: админка (admin.a-service.asia) + лендинг (a-service.kz) + локальная разработка.
-    # Домены Railway-сервисов добавляются переменной CORS_ORIGINS через запятую.
+    # CORS: админка (admin.a-service.asia) + лендинг (a-service.asia) + локальная разработка.
+    # Сайт и API на одном домене, поэтому CORS нужен только для внешних клиентов.
     cors_origins: str = (
         "http://localhost:3000,http://localhost:8734,"
         "https://admin.a-service.asia,"
-        "https://a-service.kz,https://www.a-service.kz,"
         "https://a-service.asia,https://www.a-service.asia"
     )
 
@@ -72,12 +72,20 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def _validate_secret_key(self) -> "Settings":
+        """Слабый ключ в проде заменяем случайным, а не роняем сервис.
+
+        Раньше здесь было исключение — из-за него весь сайт отдавал 502, если
+        забыли переменную. Случайный ключ безопаснее известного значения по
+        умолчанию; расплата лишь в том, что при рестарте нужно войти заново.
+        """
         if self.env != "development" and (self.secret_key == INSECURE_SECRET_KEY or len(self.secret_key) < 32):
-            raise ValueError(
-                "SECRET_KEY must be set to a unique random string of at least 32 characters "
-                "when ENV is not 'development'. Generate one with: python -c "
-                "\"import secrets; print(secrets.token_urlsafe(48))\""
+            print(
+                "[config] ВНИМАНИЕ: SECRET_KEY не задан или короче 32 символов. "
+                "Сгенерирован временный ключ — после каждого перезапуска придётся "
+                "заново входить в админку. Задайте переменную SECRET_KEY: "
+                'python -c "import secrets; print(secrets.token_urlsafe(48))"'
             )
+            object.__setattr__(self, "secret_key", secrets.token_urlsafe(48))
         return self
 
     @property
