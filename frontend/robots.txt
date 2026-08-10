@@ -20,5 +20,5 @@ Allow: /
 User-Agent: ClaudeBot
 Allow: /
 
-Host: https://precious-brioche-cad6ee.netlify.app
-Sitemap: https://precious-brioche-cad6ee.netlify.app/sitemap.xml
+Host: https://a-service.kz
+Sitemap: https://a-service.kz/sitemap.xml

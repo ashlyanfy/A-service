@@ -24,8 +24,13 @@ node_modules/
 .next/
 out/
 
-# Netlify — локальная папка CLI
-.netlify/
+# Python — кэш байт-кода
+__pycache__/
+*.pyc
+
+# Локальная база разработки (в проде — PostgreSQL из DATABASE_URL)
+aservice.db
+*.sqlite3
 
 # Архивы и локальные черновики
 *.zip

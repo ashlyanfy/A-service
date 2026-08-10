@@ -1,14 +1,14 @@
-/* A-SERVICE — связка лендинга с админкой (admin.a-service.asia).
+/* A-SERVICE — связка лендинга с CRM.
    1. Аналитика: просмотры страниц и клики по CTA уходят в собственный бэкенд.
    2. Контент: редактируемые блоки и SEO подтягиваются из админки поверх статики.
    3. Контакты: телефон/email на всех страницах обновляются из настроек CRM.
-   Адрес API задаётся сборкой: window.AS_CONFIG.apiUrl. */
+   Адрес API задаётся сборкой (window.AS_CONFIG.apiUrl); пустой — тот же домен,
+   что и сайт: бэкенд раздаёт статику сам, запросы идут на /public/... */
 (function () {
   'use strict';
 
   var CONFIG = window.AS_CONFIG || {};
   var API = (CONFIG.apiUrl || '').replace(/\/$/, '');
-  if (!API) return;
 
   var PAGE = location.pathname;
 

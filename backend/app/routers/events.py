@@ -26,12 +26,16 @@ def _today() -> date:
 
 
 def _range_conditions(date_from: date | None, date_to: date | None) -> list:
-    """Инклюзивный период [date_from, date_to]; по умолчанию — сегодня."""
+    """Инклюзивный период [date_from, date_to]; по умолчанию — сегодня.
+
+    Границы строим с tzinfo=UTC: created_at хранится как timestamptz, и наивное
+    значение PostgreSQL истолковал бы по часовому поясу сессии — сутки съезжали бы.
+    """
     start = date_from or _today()
     end = date_to or _today()
     return [
-        SiteEvent.created_at >= datetime.combine(start, datetime.min.time()),
-        SiteEvent.created_at <= datetime.combine(end, datetime.max.time()),
+        SiteEvent.created_at >= datetime.combine(start, datetime.min.time(), tzinfo=timezone.utc),
+        SiteEvent.created_at <= datetime.combine(end, datetime.max.time(), tzinfo=timezone.utc),
     ]
 
 

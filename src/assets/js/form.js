@@ -1,11 +1,16 @@
 /* A-SERVICE — анкета расчёта проекта.
    Трёхшаговый визард (Задача → Объекты → Контакты), диалог по кнопкам
    «Получить расчёт», подстановка подзадач по выбранной категории.
-   Отправка — Netlify Forms (форма a-service-project-brief). */
+   Отправка — собственный бэкенд CRM: POST /public/leads. */
 (function () {
   'use strict';
 
   var LANG = document.documentElement.lang === 'kk' ? 'kk' : 'ru';
+
+  /* Событие в Google Analytics, если аналитика подключена (см. analytics.js). */
+  function track(name, params) {
+    if (window.asTrackGA) window.asTrackGA(name, params);
+  }
 
   /* Категории работ и подзадачи (перенесено из прежней React-сборки). */
   var CATEGORIES = [
@@ -99,7 +104,11 @@
     next.addEventListener('click', function (e) {
       if (next.type === 'submit') return; // обычная отправка формы
       e.preventDefault();
-      if (stepValid()) { step = Math.min(steps.length, step + 1); render(); }
+      if (stepValid()) {
+        step = Math.min(steps.length, step + 1);
+        render();
+        track('quote_step', { quote_step: step, quote_steps_total: steps.length });
+      }
     });
 
     /* категория → подзадачи */
@@ -110,6 +119,7 @@
           l.classList.toggle('selected', l.contains(radio) && radio.checked);
         });
         var cat = CATEGORIES.find(function (c) { return c.value === radio.value; });
+        track('quote_category', { quote_category: radio.value });
         if (cat && select) {
           select.innerHTML = '';
           cat.details.forEach(function (d) {
@@ -135,34 +145,49 @@
     };
   }
 
-  /* ---------------- Отправка заявки в админку (admin.a-service.asia) ----------------
-     Форма уходит в собственный бэкенд A-SERVICE; после успеха — страница
-     «Спасибо», как и раньше. */
+  /* ---------------- Отправка заявки в CRM ----------------
+     Заявка уходит в собственный бэкенд (POST /public/leads), после успеха —
+     страница «Спасибо». Адрес API задаётся при сборке (ASERVICE_API_URL). */
+  var SEND_ERROR = LANG === 'kk'
+    ? 'Өтінімді жіберу мүмкін болмады. Бізге қоңырау шалыңыз немесе WhatsApp-қа жазыңыз.'
+    : 'Не удалось отправить заявку. Позвоните нам или напишите в WhatsApp.';
+
   function bindSubmit(form) {
     form.addEventListener('submit', function (e) {
+      e.preventDefault(); // форма всегда уходит через API, а не обычным POST
+
       var cfg = window.AS_CONFIG || {};
-      var api = (cfg.apiUrl || '').replace(/\/$/, '');
-      if (!api) return; // без API работаем как обычная форма
-      e.preventDefault();
+      var api = (cfg.apiUrl || '').replace(/\/$/, ''); // пустой — тот же домен
+
+      // Ловушка для ботов: заполненное скрытое поле — молча не отправляем.
+      var honeypot = form.querySelector('input[name="bot-field"]');
+      if (honeypot && honeypot.value) return;
 
       var submitBtn = form.querySelector('button[type="submit"]');
       if (submitBtn) submitBtn.disabled = true;
 
       var data = new FormData(form);
-      data.delete('form-name');
       data.delete('bot-field');
       if (window.asVisitorId) data.set('visitorId', window.asVisitorId());
+      // У встроенных форм sourceService пуст (его заполняет только диалог) —
+      // без этого в CRM не видно, с какой страницы пришла заявка.
+      if (!data.get('sourceService')) data.set('sourceService', location.pathname);
+
+      var category = data.get('category') || '';
 
       fetch(api + '/public/leads', { method: 'POST', body: data })
         .then(function (res) {
           if (!res.ok) throw new Error('HTTP ' + res.status);
+          track('generate_lead', {
+            quote_category: category,
+            form_place: form.closest('dialog') ? 'dialog' : 'page'
+          });
           window.location.href = form.getAttribute('action') || '/';
         })
-        .catch(function () {
+        .catch(function (err) {
           if (submitBtn) submitBtn.disabled = false;
-          alert(LANG === 'kk'
-            ? 'Өтінімді жіберу мүмкін болмады. Бізге қоңырау шалыңыз немесе WhatsApp-қа жазыңыз.'
-            : 'Не удалось отправить заявку. Позвоните нам или напишите в WhatsApp.');
+          track('lead_error', { error_reason: String(err && err.message || 'network') });
+          alert(SEND_ERROR);
         });
     });
   }
@@ -199,6 +224,7 @@
     if (!dialog.open) dialog.showModal();
     doc().classList.add('quote-dialog-open');
     if (window.asSendEvent) window.asSendEvent('QUOTE_OPEN');
+    track('quote_open', { quote_source: (detail && detail.sourceService) || location.pathname });
   }
 
   /* Любая кнопка «Получить расчёт/предложение» вне форм открывает диалог */

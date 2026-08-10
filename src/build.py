@@ -8,6 +8,7 @@
 
 Запуск из корня репозитория:  python src/build.py
 """
+import datetime
 import glob
 import hashlib
 import json
@@ -38,16 +39,37 @@ HEAD_BOTTOM = (
     '<link rel="icon" href="/icons/icon-192-v2.png" sizes="192x192" type="image/png"/>'
     '<link rel="apple-touch-icon" href="/icons/apple-touch-icon-v2.png"/>'
 )
-# Адрес API CRM: переопределяется переменной окружения при прод-сборке
-API_URL = os.environ.get('ASERVICE_API_URL', 'http://localhost:8010')
+# ── Параметры сборки (переопределяются переменными окружения) ──
+# Адрес API CRM. Пусто = тот же домен, что и сайт: бэкенд раздаёт статику сам,
+# запросы уходят на /public/... без CORS. Задавать нужно только при раздельном
+# запуске (например ASERVICE_API_URL=http://localhost:8010 для разработки).
+API_URL = os.environ.get('ASERVICE_API_URL', '').rstrip('/')
+# Канонический адрес сайта — подставляется в sitemap.xml и robots.txt.
+SITE_URL = os.environ.get('ASERVICE_SITE_URL', 'https://a-service.kz').rstrip('/')
+# Идентификатор потока Google Analytics 4 (G-XXXXXXXXXX). Пустой — GA не подключается.
+GA_ID = os.environ.get('ASERVICE_GA_ID', '').strip()
 
 SCRIPTS = (
-    '<script>window.AS_CONFIG={{apiUrl:"{api_url}"}}</script>'
+    '<script>window.AS_CONFIG={{apiUrl:"{api_url}",gaId:"{ga_id}",'
+    'lang:"{lang}",section:"{section}"}}</script>'
     '<script defer src="/assets/js/main.js?v={js_v}"></script>'
     '<script defer src="/assets/js/cms.js?v={js_v}"></script>'
     '<script defer src="/assets/js/form.js?v={js_v}"></script>'
 )
 SEARCH_SCRIPT = '<script defer src="/assets/js/search.js?v={js_v}"></script>'
+
+# Google Analytics 4: базовый тег + наш сборщик событий (analytics.js).
+# Вставляется только если задан ASERVICE_GA_ID.
+# Разрезы page_lang / page_section уходят вместе с автоматическим page_view,
+# поэтому просмотр засчитывается даже если analytics.js не успел загрузиться.
+GA_SNIPPET = (
+    '<script async src="https://www.googletagmanager.com/gtag/js?id={ga_id}"></script>'
+    '<script>window.dataLayer=window.dataLayer||[];'
+    'function gtag(){{dataLayer.push(arguments);}}'
+    'gtag("js",new Date());'
+    'gtag("config","{ga_id}",{{"page_lang":"{lang}","page_section":"{section}"}});</script>'
+    '<script defer src="/assets/js/analytics.js?v={js_v}"></script>'
+)
 
 VERSIONS = {'css_v': '0', 'js_v': '0'}
 
@@ -163,12 +185,33 @@ def page_url(lang, slug):
     return '/%s/' % lang if rel == 'index' else '/%s/%s/' % (lang, rel)
 
 
+CATALOG_SLUGS = {'uslugi', 'kyzmetter'}      # каталог услуг (ru / kk)
+CONTACT_SLUGS = {'kontakty', 'baylanystar'}  # контакты (ru / kk)
+
+
+def page_section(fm, slug):
+    """Раздел сайта для аналитики (параметр page_section в Google Analytics)."""
+    if slug == 'index':
+        return 'home'
+    if fm.get('nav'):
+        return fm['nav']
+    if slug in CATALOG_SLUGS:
+        return 'uslugi'
+    if slug in CONTACT_SLUGS:
+        return 'kontakty'
+    if '__' in slug:
+        return slug.split('__')[0]  # blog__..., proekty__... -> раздел
+    return 'other'
+
+
 def render_page(fm, lang, slug, tpl):
     self_url = page_url(lang, slug)
     header = render_header(tpl['header'], lang, self_url, fm.get('pair') or '/%s/' % ('kk' if lang == 'ru' else 'ru'), fm.get('nav'))
+    section = page_section(fm, slug)
+    ga = GA_SNIPPET.format(ga_id=GA_ID, js_v=VERSIONS['js_v'], lang=lang, section=section) if GA_ID else ''
     head = (HEAD_TOP.format(lang=lang, css_v=VERSIONS['css_v']) + '\n' + fm['head'] + '\n' + HEAD_BOTTOM +
             (SCRIPTS + (SEARCH_SCRIPT if slug == SEARCH_SLUGS[lang] else '')).format(
-                js_v=VERSIONS['js_v'], api_url=API_URL))
+                js_v=VERSIONS['js_v'], api_url=API_URL, ga_id=GA_ID, lang=lang, section=section) + ga)
     jsonld = tpl['jsonld'] + ('\n' + fm['jsonld'] if fm['jsonld'] else '')
     skip = ('<a class="skip-link" href="#main-content">Перейти к содержанию</a>' if lang == 'ru'
             else '<a class="skip-link" href="#main-content">Мазмұнға өту</a>')
@@ -178,6 +221,7 @@ def render_page(fm, lang, slug, tpl):
 
 def build_pages():
     search_index = {l: [] for l in LANGS}
+    sitemap = []
     for lang in LANGS:
         tpl = {
             'header': read(os.path.join(SRC, 'templates', 'header-%s.html' % lang)).strip(),
@@ -199,10 +243,105 @@ def build_pages():
                         'title': t.group(1),
                         'description': d.group(1),
                     })
+                sitemap.append({
+                    'lang': lang,
+                    'url': page_url(lang, slug),
+                    'pair': fm.get('pair'),
+                    'nav': fm.get('nav'),
+                    'slug': slug,
+                    'lastmod': datetime.datetime.fromtimestamp(
+                        os.path.getmtime(path), datetime.timezone.utc),
+                })
     for lang in LANGS:
         write(os.path.join(OUT, 'assets', 'search-%s.json' % lang),
               json.dumps(search_index[lang], ensure_ascii=False, indent=1))
-    return {l: len(search_index[l]) for l in LANGS}
+    return {l: len(search_index[l]) for l in LANGS}, sitemap
+
+
+# ── sitemap.xml и robots.txt: адрес берётся из ASERVICE_SITE_URL ──
+
+def sitemap_weight(entry):
+    """Приоритет и частота обхода: главная > каталог услуг и контакты > остальное."""
+    if entry['slug'] == 'index':
+        return '1.0', 'weekly'
+    if entry['slug'] in CATALOG_SLUGS:
+        return '0.9', 'weekly'
+    if entry['slug'] in CONTACT_SLUGS:
+        return '0.9', 'monthly'
+    return '0.75', 'monthly'
+
+
+def build_sitemap(entries):
+    by_url = {e['url']: e for e in entries}
+    out = ['<?xml version="1.0" encoding="UTF-8"?>',
+           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" '
+           'xmlns:xhtml="http://www.w3.org/1999/xhtml">']
+    for e in entries:
+        priority, changefreq = sitemap_weight(e)
+        ru_url = e['url'] if e['lang'] == 'ru' else e['pair']
+        kk_url = e['url'] if e['lang'] == 'kk' else e['pair']
+        out.append('<url>')
+        out.append('<loc>%s%s</loc>' % (SITE_URL, e['url']))
+        # Альтернативы указываем только на страницы, которые сами есть в индексе.
+        if ru_url and ru_url in by_url:
+            out.append('<xhtml:link rel="alternate" hreflang="ru-KZ" href="%s%s" />' % (SITE_URL, ru_url))
+        if kk_url and kk_url in by_url:
+            out.append('<xhtml:link rel="alternate" hreflang="kk-KZ" href="%s%s" />' % (SITE_URL, kk_url))
+        if ru_url and ru_url in by_url:
+            out.append('<xhtml:link rel="alternate" hreflang="x-default" href="%s%s" />' % (SITE_URL, ru_url))
+        out.append('<lastmod>%s</lastmod>' % e['lastmod'].strftime('%Y-%m-%dT%H:%M:%S+00:00'))
+        out.append('<changefreq>%s</changefreq>' % changefreq)
+        out.append('<priority>%s</priority>' % priority)
+        out.append('</url>')
+    out.append('</urlset>')
+    write(os.path.join(OUT, 'sitemap.xml'), '\n'.join(out) + '\n')
+    return len(entries)
+
+
+ROBOTS = """User-Agent: *
+Allow: /
+Disallow: /api/
+
+User-Agent: Googlebot
+Allow: /
+
+User-Agent: Bingbot
+Allow: /
+
+User-Agent: OAI-SearchBot
+Allow: /
+
+User-Agent: ChatGPT-User
+Allow: /
+
+User-Agent: PerplexityBot
+Allow: /
+
+User-Agent: ClaudeBot
+Allow: /
+
+Host: {site}
+Sitemap: {site}/sitemap.xml
+"""
+
+
+def build_robots():
+    write(os.path.join(OUT, 'robots.txt'), ROBOTS.format(site=SITE_URL))
+
+
+def build_redirects():
+    """src/redirects.txt -> frontend/redirects.json (их отдаёт бэкенд, 301)."""
+    path = os.path.join(SRC, 'redirects.txt')
+    rules = {}
+    for line in open(path, encoding='utf-8'):
+        line = line.strip()
+        if not line or line.startswith('#'):
+            continue
+        parts = line.split()
+        if len(parts) >= 2:
+            rules[parts[0]] = parts[1]
+    write(os.path.join(OUT, 'redirects.json'), json.dumps(rules, ensure_ascii=False, indent=1))
+    return len(rules)
 
 
 ROOT_INDEX = """<!DOCTYPE html><html lang="ru">
@@ -252,10 +391,16 @@ def main():
     patch_sw()
     VERSIONS['css_v'] = asset_hash([os.path.join(OUT, 'assets', 'css', 'site.css')])
     VERSIONS['js_v'] = asset_hash(glob.glob(os.path.join(OUT, 'assets', 'js', '*.js')))
-    counts = build_pages()
+    counts, sitemap_entries = build_pages()
     write(os.path.join(OUT, 'index.html'), ROOT_INDEX)
     build_404()
+    urls = build_sitemap(sitemap_entries)
+    build_robots()
+    rules = build_redirects()
     print('built pages per locale (indexable):', counts)
+    print('site url :', SITE_URL, '| sitemap urls:', urls, '| redirects:', rules)
+    print('api url  :', API_URL or '(тот же домен, что и сайт)')
+    print('ga4 id   :', GA_ID or '(не задан — Google Analytics не подключён)')
 
 
 if __name__ == '__main__':

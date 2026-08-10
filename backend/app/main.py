@@ -17,6 +17,7 @@ from app.routers import (
     settings as settings_router,
     users,
 )
+from app.static_site import STATIC_DIR, mount_site
 
 # 12 MB: заявка с вложением до 10 MB + поля формы; остальные запросы много меньше.
 MAX_BODY_SIZE = 12 * 1024 * 1024
@@ -81,3 +82,11 @@ app.include_router(public.router)
 @app.get("/health")
 async def health() -> dict:
     return {"status": "ok"}
+
+
+# Статика сайта монтируется последней: маршруты API объявлены выше и имеют приоритет.
+if not mount_site(app):
+    print(
+        f"[static] папка сборки не найдена: {STATIC_DIR}. Поднят только API. "
+        "Соберите сайт (python src/build.py) и запускайте сервис из корня репозитория."
+    )

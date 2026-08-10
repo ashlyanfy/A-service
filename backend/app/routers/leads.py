@@ -57,10 +57,12 @@ async def list_leads(
         conditions.append(Lead.status == status_filter)
     if category:
         conditions.append(Lead.category == category)
+    # Границы суток — с tzinfo=UTC: created_at это timestamptz, наивное значение
+    # PostgreSQL истолковал бы по часовому поясу сессии.
     if date_from:
-        conditions.append(Lead.created_at >= datetime.combine(date_from, datetime.min.time()))
+        conditions.append(Lead.created_at >= datetime.combine(date_from, datetime.min.time(), tzinfo=timezone.utc))
     if date_to:
-        conditions.append(Lead.created_at <= datetime.combine(date_to, datetime.max.time()))
+        conditions.append(Lead.created_at <= datetime.combine(date_to, datetime.max.time(), tzinfo=timezone.utc))
 
     for cond in conditions:
         stmt = stmt.where(cond)

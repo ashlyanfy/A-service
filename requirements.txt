@@ -1,0 +1,3 @@
+# Зависимости одного сервиса Railway: он собирает статику и поднимает API.
+# Сами пакеты перечислены в backend/requirements.txt.
+-r backend/requirements.txt

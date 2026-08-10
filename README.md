@@ -3,7 +3,17 @@
 Корпоративный сайт A-SERVICE (Казахстан): монтаж/демонтаж банкоматов, покраска,
 козырьки, корпоративная логистика. Два языка: русский (`/ru/`) и казахский (`/kk/`).
 
-Продакшн: https://majestic-salmiakki-b87621.netlify.app
+Продакшн — Railway, два сервиса:
+
+| Сервис  | Что это                                   | Root directory |
+|---------|-------------------------------------------|----------------|
+| основной| сайт + CRM API одним процессом (FastAPI)  | `/` (корень репозитория) |
+| `admin` | Next.js админка                           | `admin/`       |
+
+Сайт и API живут на одном домене: бэкенд раздаёт собранную статику из `frontend/`,
+а форма и аналитика бьют в `/public/...` того же домена — без CORS и отдельного
+веб-сервера. Адрес сервиса: `https://artistic-serenity-production-bbc1.up.railway.app`
+(после привязки — `https://a-service.kz`).
 
 Сайт — чистая статика (HTML/CSS/JS без фреймворков), собирается из `src/` в `frontend/`.
 
@@ -15,36 +25,81 @@
 │   ├── content/ru/ kk/   # по файлу на страницу: front-matter (@meta/@head/@jsonld) + <main>
 │   ├── templates/        # шапка, подвал+диалог расчёта, общий JSON-LD (по локали)
 │   ├── assets/css/       # слои каскада 10..60 — подключаются строго по номерам
-│   ├── assets/js/        # main.js (шапка, reveal, видео), form.js (анкета), search.js
+│   ├── assets/js/        # main.js (шапка, reveal), form.js (анкета), cms.js (CRM),
+│   │                     # analytics.js (события Google Analytics), search.js
+│   ├── redirects.txt     # 301 со старых /en/-адресов
 │   └── tools/            # одноразовые скрипты миграции (extract, split_css, ...)
-├── frontend/         # РЕЗУЛЬТАТ СБОРКИ — публикуется на Netlify, руками не править
+├── frontend/         # РЕЗУЛЬТАТ СБОРКИ — раздаётся сервисом site, руками не править
 │   ├── ru/ kk/           # собранные страницы
 │   ├── assets/           # site.css (склейка слоёв), js, search-*.json
-│   ├── images/ icons/ video/ brands/   # медиа (копируются как есть)
-│   └── _redirects, _headers, sitemap.xml, robots.txt, sw.js, манифесты PWA
-├── backend/          # FastAPI CRM API: заявки, аналитика, контент, SEO (см. README внутри)
+│   ├── images/ icons/ video/ brands/   # медиа (лежат в репозитории как есть)
+│   └── sitemap.xml, robots.txt, redirects.json (генерируются), sw.js, манифесты PWA
+├── backend/          # FastAPI: CRM API + раздача сайта (см. README внутри)
+│   └── app/static_site.py   # отдача frontend/, старые 301-редиректы, кэш-заголовки
 ├── admin/            # Next.js админка admin.a-service.asia (см. README внутри)
-└── netlify.toml      # publish = "frontend"
+└── Procfile          # сборка статики + запуск сервиса (одна команда для Railway)
 ```
+
+## Переменные сборки сайта
+
+Значения зашиваются в HTML на этапе сборки, поэтому после их изменения сайт
+нужно пересобрать (в Railway — передеплоить сервис `site`).
+
+| Переменная          | По умолчанию           | Зачем                                        |
+|---------------------|------------------------|----------------------------------------------|
+| `ASERVICE_API_URL`  | пусто = тот же домен   | адрес CRM; задавать только при раздельном запуске (`http://localhost:8010`) |
+| `ASERVICE_SITE_URL` | `https://a-service.kz` | канонический домен для `sitemap.xml`/`robots.txt` |
+| `ASERVICE_GA_ID`    | пусто                  | поток Google Analytics 4 (`G-XXXXXXXXXX`); пусто — GA не подключается |
+
+```bash
+ASERVICE_GA_ID=G-XXXXXXXXXX python src/build.py
+```
+
+Сборка печатает, с какими значениями отработала — их видно в логе деплоя.
+Статика собирается на старте сервиса (`Procfile`), поэтому достаточно поменять
+переменную и передеплоить — пересобирать вручную не нужно.
 
 ## Связка с админкой
 
-Лендинг связан с админкой (admin.a-service.asia) через backend:
-- форма «Получить расчёт» отправляет заявки в админку (`/public/leads`);
-- аналитика посещений и кликов уходит в админку (`/public/events`);
+Лендинг связан с админкой через backend:
+- форма «Получить расчёт» отправляет заявки в CRM (`POST /public/leads`);
+- посещения и клики по CTA уходят в CRM (`POST /public/events`) — раздел
+  «Мониторинг сайта» на дашборде админки;
 - SEO и редактируемые блоки страниц подтягиваются из админки поверх статики
-  (`src/assets/js/cms.js`);
-- адрес API задаётся при сборке: `ASERVICE_API_URL=https://api.a-service.asia python src/build.py`
-  (по умолчанию http://localhost:8010 для разработки).
+  (`src/assets/js/cms.js`).
+
+Все три запроса идут на тот же домен, что и страница, поэтому CORS не участвует.
+Админка ходит в API через rewrite Next.js (`NEXT_PUBLIC_API_URL`), тоже без CORS.
+
+## Аналитика
+
+Две независимые системы:
+
+1. **Своя** (`src/assets/js/cms.js` → CRM): просмотры, WhatsApp, звонки,
+   открытия анкеты, отправки заявок. Видна в админке, привязана к заявкам.
+2. **Google Analytics 4** (`src/assets/js/analytics.js`): подробное поведение —
+   клики по кнопкам, карточкам, меню, внешним ссылкам, шаги анкеты, глубина
+   прокрутки, время на странице. Включается переменной `ASERVICE_GA_ID`.
+
+Каждое событие GA несёт разрезы `page_path`, `page_lang` (ru/kk) и
+`page_section` (home, uslugi, proekty, resheniya, kontakty, blog, other).
 
 ## Сборка и запуск
 
+Как в проде — один процесс отдаёт и сайт, и API:
+
 ```bash
 python src/build.py
-python -m http.server 8734 --directory frontend
+cd backend && python -m app.seed && uvicorn app.main:app --port 8000
 ```
 
-Затем открыть http://localhost:8734/ru/
+Затем открыть http://localhost:8000/ru/
+
+Только статика, без backend (тогда форма и аналитика работать не будут):
+
+```bash
+python src/build.py && python -m http.server 8734 --directory frontend
+```
 
 ## Как править
 
@@ -54,18 +109,21 @@ python -m http.server 8734 --directory frontend
   Файлы 10–50 — исторические слои старого дизайна, порядок менять нельзя.
 - **Шапку/подвал/диалог** — `src/templates/*-{ru,kk}.html` (общие для всех страниц).
 - **Поведение** — `src/assets/js/*.js`.
+- **Редиректы со старых адресов** — `src/redirects.txt`, применяются бэкендом.
 - Ссылки на CSS/JS версионируются хэшем автоматически (`?v=`), кэш сбрасывается сам.
 
 ## Формы
 
 Форма «Получить расчёт» (диалог на каждой странице + встроенная на «Контактах»
 и «Запросе КП»). Трёхшаговый визард — `src/assets/js/form.js`, справочник
-категорий/подзадач там же. Заявки уходят в backend (`POST /public/leads`)
-и видны в админке; без доступного API форма не отправляется — адрес задаётся
-переменной `ASERVICE_API_URL` при сборке.
+категорий/подзадач там же. Заявка уходит только в backend (`POST /public/leads`);
+если API недоступен, посетитель видит сообщение с просьбой позвонить или
+написать в WhatsApp.
 
 ## История
 
 До 2026-08 сайт был статическим экспортом Next.js (85 страниц × 2 локали, дубли
 контента в RSC-payload). Переведён на чистую статику без изменения дизайна;
-исходники старой сборки — в git-истории.
+исходники старой сборки — в git-истории. В августе 2026 переехал с Netlify на
+Railway: `netlify.toml`, `_redirects` и `_headers` убраны, сайт раздаёт сам
+backend, домен `*.netlify.app` заменён на `a-service.kz`.

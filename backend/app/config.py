@@ -19,11 +19,13 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 30
     refresh_token_expire_days: int = 30
 
-    # CORS: админка (admin.a-service.asia) + лендинг + локальная разработка
+    # CORS: админка (admin.a-service.asia) + лендинг (a-service.kz) + локальная разработка.
+    # Домены Railway-сервисов добавляются переменной CORS_ORIGINS через запятую.
     cors_origins: str = (
         "http://localhost:3000,http://localhost:8734,"
-        "https://admin.a-service.asia,https://a-service.asia,https://www.a-service.asia,"
-        "https://majestic-salmiakki-b87621.netlify.app"
+        "https://admin.a-service.asia,"
+        "https://a-service.kz,https://www.a-service.kz,"
+        "https://a-service.asia,https://www.a-service.asia"
     )
 
     # Админка (ссылки в письмах восстановления пароля)
