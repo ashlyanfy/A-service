@@ -11,7 +11,17 @@
   'use strict';
 
   var CFG = window.AS_CONFIG || {};
-  if (!CFG.gaId || typeof window.gtag !== 'function') return;
+  if (!CFG.gaId) return;
+
+  // Пишем прямо в очередь dataLayer — так же, как это делает сам gtag.
+  // Не зависим от того, успел ли определиться window.gtag: оптимизаторы
+  // хостинга (например Cloudflare Rocket Loader) откладывают inline-скрипты,
+  // и проверка на функцию раньше отключала весь сбор событий.
+  window.dataLayer = window.dataLayer || [];
+
+  function pushToDataLayer() {
+    window.dataLayer.push(arguments);
+  }
 
   var LANG = CFG.lang || (document.documentElement.lang === 'kk' ? 'kk' : 'ru');
   var SECTION = CFG.section || 'other';
@@ -32,7 +42,7 @@
         }
       }
     }
-    window.gtag('event', name, payload);
+    (window.gtag || pushToDataLayer)('event', name, payload);
   }
 
   /* Доступно другим скриптам (form.js шлёт события анкеты). */
