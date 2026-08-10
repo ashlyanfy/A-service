@@ -46,8 +46,8 @@ HEAD_BOTTOM = (
 API_URL = os.environ.get('ASERVICE_API_URL', '').rstrip('/')
 # Канонический адрес сайта — подставляется в sitemap.xml и robots.txt.
 SITE_URL = os.environ.get('ASERVICE_SITE_URL', 'https://a-service.kz').rstrip('/')
-# Идентификатор потока Google Analytics 4 (G-XXXXXXXXXX). Пустой — GA не подключается.
-GA_ID = os.environ.get('ASERVICE_GA_ID', '').strip()
+# Поток Google Analytics 4 сайта A-SERVICE. Пустое значение отключает счётчик.
+GA_ID = os.environ.get('ASERVICE_GA_ID', 'G-VYR6JFNXZM').strip()
 
 SCRIPTS = (
     '<script>window.AS_CONFIG={{apiUrl:"{api_url}",gaId:"{ga_id}",'
