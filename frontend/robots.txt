@@ -20,5 +20,5 @@ Allow: /
 User-Agent: ClaudeBot
 Allow: /
 
-Host: https://a-service.kz
-Sitemap: https://a-service.kz/sitemap.xml
+Host: https://a-service.asia
+Sitemap: https://a-service.asia/sitemap.xml

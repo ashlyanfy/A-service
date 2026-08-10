@@ -45,7 +45,7 @@ HEAD_BOTTOM = (
 # запуске (например ASERVICE_API_URL=http://localhost:8010 для разработки).
 API_URL = os.environ.get('ASERVICE_API_URL', '').rstrip('/')
 # Канонический адрес сайта — подставляется в sitemap.xml и robots.txt.
-SITE_URL = os.environ.get('ASERVICE_SITE_URL', 'https://a-service.kz').rstrip('/')
+SITE_URL = os.environ.get('ASERVICE_SITE_URL', 'https://a-service.asia').rstrip('/')
 # Поток Google Analytics 4 сайта A-SERVICE. Пустое значение отключает счётчик.
 GA_ID = os.environ.get('ASERVICE_GA_ID', 'G-VYR6JFNXZM').strip()
 
