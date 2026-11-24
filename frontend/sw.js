@@ -1,4 +1,4 @@
-const CACHE_NAME = "a-service-static-v9-clean";
+const CACHE_NAME = "a-service-static-v11-portfolio";
 const OFFLINE_URLS = ["/ru/offline/", "/kk/offline/"];
 const PRECACHE = [
   "/manifest.webmanifest",
@@ -30,7 +30,7 @@ self.addEventListener("activate", (event) => {
       .then((keys) =>
         Promise.all(
           keys
-            .filter((key) => key !== CACHE_NAME)
+            .filter((key) => key.startsWith("a-service-static-") && key !== CACHE_NAME)
             .map((key) => caches.delete(key))
         )
       )
@@ -46,6 +46,9 @@ self.addEventListener("fetch", (event) => {
   if (
     url.origin !== self.location.origin ||
     url.pathname.startsWith("/api/") ||
+    url.pathname.startsWith("/public/") ||
+    url.pathname.startsWith("/manager/") ||
+    request.headers.has("range") ||
     url.pathname === "/robots.txt" ||
     url.pathname === "/sitemap.xml"
   ) {
@@ -74,9 +77,7 @@ self.addEventListener("fetch", (event) => {
   if (
     url.pathname.startsWith("/images/") ||
     url.pathname.startsWith("/icons/") ||
-    (url.pathname.startsWith("/video/") &&
-      !request.headers.has("range")) ||
-    url.pathname.startsWith("/assets/")
+    (url.pathname.startsWith("/assets/") && url.searchParams.has("v"))
   ) {
     event.respondWith(
       caches.match(request).then(

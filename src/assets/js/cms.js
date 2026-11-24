@@ -87,6 +87,9 @@
   /* ---------------- Контентные блоки поверх статики (data-block / data-field) */
   function setFieldValue(el, value) {
     if (value === undefined || value === null || value === '') return;
+    // Сохраняем фирменную разбивку заголовка, если текст редактора совпадает со статикой.
+    var clean = function (text) { return String(text).replace(/\s+/g, ' ').trim(); };
+    if (el.tagName !== 'IMG' && clean(el.innerText || el.textContent) === clean(value)) return;
     if (el.tagName === 'IMG') { el.src = value; return; }
     el.textContent = '';
     String(value).split('\n').forEach(function (line, i) {

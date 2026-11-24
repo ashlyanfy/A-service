@@ -1,24 +1,21 @@
-User-Agent: *
-Allow: /
-Disallow: /api/
+User-agent: *
+Disallow: /api
+Disallow: /public/
+Disallow: /admin
+Disallow: /auth
+Disallow: /manager
+Disallow: /leads
+Disallow: /events
+Disallow: /settings
+Disallow: /pages
+Disallow: /seo
+Disallow: /notifications
+Disallow: /users
+Disallow: /search
+Disallow: /health
+Disallow: /docs
+Disallow: /redoc
+Disallow: /openapi.json
+Disallow: /service-page.html
 
-User-Agent: Googlebot
-Allow: /
-
-User-Agent: Bingbot
-Allow: /
-
-User-Agent: OAI-SearchBot
-Allow: /
-
-User-Agent: ChatGPT-User
-Allow: /
-
-User-Agent: PerplexityBot
-Allow: /
-
-User-Agent: ClaudeBot
-Allow: /
-
-Host: https://a-service.asia
 Sitemap: https://a-service.asia/sitemap.xml

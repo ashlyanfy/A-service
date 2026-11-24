@@ -8,13 +8,17 @@
 
 Запуск из корня репозитория:  python src/build.py
 """
-import datetime
 import glob
+import html as html_tools
 import hashlib
 import json
 import os
 import re
 import shutil
+from urllib.parse import urlsplit
+
+import bank_storefront
+from discovery import write_site_guides
 
 SRC = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(SRC, '..'))
@@ -48,13 +52,18 @@ API_URL = os.environ.get('ASERVICE_API_URL', '').rstrip('/')
 SITE_URL = os.environ.get('ASERVICE_SITE_URL', 'https://a-service.asia').rstrip('/')
 # Поток Google Analytics 4 сайта A-SERVICE. Пустое значение отключает счётчик.
 GA_ID = os.environ.get('ASERVICE_GA_ID', 'G-VYR6JFNXZM').strip()
+INDEXABLE = os.environ.get('ASERVICE_INDEXABLE', '1') == '1'
 
 SCRIPTS = (
     '<script>window.AS_CONFIG={{apiUrl:"{api_url}",gaId:"{ga_id}",'
     'lang:"{lang}",section:"{section}"}}</script>'
     '<script defer src="/assets/js/main.js?v={js_v}"></script>'
     '<script defer src="/assets/js/cms.js?v={js_v}"></script>'
-    '<script defer src="/assets/js/form.js?v={js_v}"></script>'
+    '<link rel="stylesheet" href="/quote.css"/>'
+    '<script defer src="/services.js"></script>'
+    '<script defer src="/bank-resources.js"></script>'
+    '<script defer src="/quote.js"></script>'
+    '<script defer src="/assets/js/form.js?v={js_v}"></script>' 
 )
 SEARCH_SCRIPT = '<script defer src="/assets/js/search.js?v={js_v}"></script>'
 
@@ -219,7 +228,7 @@ def render_page(fm, lang, slug, tpl):
             % (lang, head, jsonld, skip, header, fm['main'], tpl['post']))
 
 
-def build_pages():
+def build_pages(excluded):
     search_index = {l: [] for l in LANGS}
     sitemap = []
     for lang in LANGS:
@@ -231,7 +240,13 @@ def build_pages():
         for path in sorted(glob.glob(os.path.join(SRC, 'content', lang, '*.html'))):
             slug = os.path.splitext(os.path.basename(path))[0]
             fm = parse_content(path)
-            html = render_page(fm, lang, slug, tpl)
+            route = page_url(lang, slug)
+            if route in excluded:
+                continue
+            html = render_page(fm, lang, slug, tpl).replace('https://a-service.asia/', SITE_URL + '/')
+            if not INDEXABLE:
+                html = re.sub(r'<meta\b[^>]*\bname="robots"[^>]*>', '', html, flags=re.I)
+                html = html.replace('</head>', '<meta name="robots" content="noindex,follow"></head>', 1)
             write(page_out_path(lang, slug), html)
 
             if 'noindex' not in fm['head']:
@@ -249,13 +264,8 @@ def build_pages():
                     'pair': fm.get('pair'),
                     'nav': fm.get('nav'),
                     'slug': slug,
-                    'lastmod': datetime.datetime.fromtimestamp(
-                        os.path.getmtime(path), datetime.timezone.utc),
                 })
-    for lang in LANGS:
-        write(os.path.join(OUT, 'assets', 'search-%s.json' % lang),
-              json.dumps(search_index[lang], ensure_ascii=False, indent=1))
-    return {l: len(search_index[l]) for l in LANGS}, sitemap
+    return search_index, sitemap
 
 
 # ── sitemap.xml и robots.txt: адрес берётся из ASERVICE_SITE_URL ──
@@ -275,7 +285,8 @@ def build_sitemap(entries):
     by_url = {e['url']: e for e in entries}
     out = ['<?xml version="1.0" encoding="UTF-8"?>',
            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" '
-           'xmlns:xhtml="http://www.w3.org/1999/xhtml">']
+           'xmlns:xhtml="http://www.w3.org/1999/xhtml" '
+           'xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">']
     for e in entries:
         priority, changefreq = sitemap_weight(e)
         ru_url = e['url'] if e['lang'] == 'ru' else e['pair']
@@ -289,44 +300,28 @@ def build_sitemap(entries):
             out.append('<xhtml:link rel="alternate" hreflang="kk-KZ" href="%s%s" />' % (SITE_URL, kk_url))
         if ru_url and ru_url in by_url:
             out.append('<xhtml:link rel="alternate" hreflang="x-default" href="%s%s" />' % (SITE_URL, ru_url))
-        out.append('<lastmod>%s</lastmod>' % e['lastmod'].strftime('%Y-%m-%dT%H:%M:%S+00:00'))
         out.append('<changefreq>%s</changefreq>' % changefreq)
         out.append('<priority>%s</priority>' % priority)
+        for image in e.get('images', ()):
+            if not image.startswith('/assets/') or not os.path.isfile(os.path.join(OUT, image.lstrip('/'))):
+                raise ValueError('Missing local sitemap image for ' + e['url'] + ': ' + image)
+            out.append('<image:image><image:loc>' + html_tools.escape(SITE_URL + image) + '</image:loc></image:image>')
         out.append('</url>')
     out.append('</urlset>')
     write(os.path.join(OUT, 'sitemap.xml'), '\n'.join(out) + '\n')
     return len(entries)
 
 
-ROBOTS = """User-Agent: *
-Allow: /
-Disallow: /api/
-
-User-Agent: Googlebot
-Allow: /
-
-User-Agent: Bingbot
-Allow: /
-
-User-Agent: OAI-SearchBot
-Allow: /
-
-User-Agent: ChatGPT-User
-Allow: /
-
-User-Agent: PerplexityBot
-Allow: /
-
-User-Agent: ClaudeBot
-Allow: /
-
-Host: {site}
-Sitemap: {site}/sitemap.xml
-"""
-
-
 def build_robots():
-    write(os.path.join(OUT, 'robots.txt'), ROBOTS.format(site=SITE_URL))
+    # Public search crawlers, including OAI-SearchBot, use the same rules as other readers.
+    private = ['/api', '/public/', '/admin', '/auth', '/manager', '/leads', '/events',
+               '/settings', '/pages', '/seo', '/notifications', '/users', '/search',
+               '/health', '/docs', '/redoc', '/openapi.json', '/service-page.html']
+    rules = ['Disallow: ' + item for item in private] if INDEXABLE else ['Disallow: /']
+    content = ['User-agent: *', *rules]
+    if INDEXABLE:
+        content.extend(['', 'Sitemap: ' + SITE_URL + '/sitemap.xml'])
+    write(os.path.join(OUT, 'robots.txt'), '\n'.join(content) + '\n')
 
 
 def build_redirects():
@@ -340,8 +335,18 @@ def build_redirects():
         parts = line.split()
         if len(parts) >= 2:
             rules[parts[0]] = parts[1]
+    # Original English shortcuts may point at new aliases. Resolve once during build.
+    for alias in rules:
+        dest = rules[alias]
+        seen = {alias}
+        while dest in rules:
+            if dest in seen:
+                raise ValueError('Redirect cycle at ' + dest)
+            seen.add(dest)
+            dest = rules[dest]
+        rules[alias] = dest
     write(os.path.join(OUT, 'redirects.json'), json.dumps(rules, ensure_ascii=False, indent=1))
-    return len(rules)
+    return rules
 
 
 ROOT_INDEX = """<!DOCTYPE html><html lang="ru">
@@ -385,20 +390,38 @@ def build_404():
 
 
 def main():
+    base = urlsplit(SITE_URL)
+    if base.scheme not in ('http', 'https') or not base.hostname or base.path or base.query or base.fragment or base.username or base.password:
+        raise ValueError('ASERVICE_SITE_URL must be an HTTP(S) origin without a path.')
+    bank_pages = bank_storefront.catalogue()
     clean_output()
     build_css()
     build_js()
     patch_sw()
     VERSIONS['css_v'] = asset_hash([os.path.join(OUT, 'assets', 'css', 'site.css')])
     VERSIONS['js_v'] = asset_hash(glob.glob(os.path.join(OUT, 'assets', 'js', '*.js')))
-    counts, sitemap_entries = build_pages()
+    redirects = build_redirects()
+    if set(redirects).intersection(bank_pages):
+        raise ValueError('A canonical storefront page cannot also be a redirect.')
+    legacy_search, sitemap_entries = build_pages(set(redirects) | set(bank_pages))
+    def extra_scripts(lang, section):
+        js_version = VERSIONS['js_v']
+        ga = GA_SNIPPET.format(ga_id=GA_ID, js_v=js_version, lang=lang, section=section) if GA_ID else ''
+        return bank_storefront.shared_scripts(lang, section, API_URL, GA_ID, js_version, ga)
+    bank_search, extra_entries = bank_storefront.install(bank_pages, OUT, SITE_URL, INDEXABLE, extra_scripts)
+    counts = {}
+    for lang in LANGS:
+        rows = bank_search[lang] + legacy_search[lang]
+        counts[lang] = len(rows)
+        write(os.path.join(OUT, 'assets', 'search-%s.json' % lang), json.dumps(rows, ensure_ascii=False, indent=1))
+    sitemap_entries.extend(extra_entries)
     write(os.path.join(OUT, 'index.html'), ROOT_INDEX)
     build_404()
-    urls = build_sitemap(sitemap_entries)
+    urls = build_sitemap(sitemap_entries if INDEXABLE else [])
+    write_site_guides(OUT, SITE_URL, bank_search, legacy_search, INDEXABLE)
     build_robots()
-    rules = build_redirects()
     print('built pages per locale (indexable):', counts)
-    print('site url :', SITE_URL, '| sitemap urls:', urls, '| redirects:', rules)
+    print('site url :', SITE_URL, '| sitemap urls:', urls, '| redirects:', len(redirects))
     print('api url  :', API_URL or '(тот же домен, что и сайт)')
     print('ga4 id   :', GA_ID or '(не задан — Google Analytics не подключён)')
 

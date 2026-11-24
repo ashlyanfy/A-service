@@ -5907,3 +5907,7 @@ a.button[href^="https://wa.me"]:hover,a.button[href^="https://wa.me"]:focus-visi
     gap:56px;
   }
 }
+
+/* Архивные страницы сохраняют отдельную форму для ТЗ с приложениями. */
+.quote-advanced { margin-block-start: 1.2rem; }
+.quote-advanced > summary { color: #3b24a8; cursor: pointer; padding-block: .7rem; font-weight: 600; }

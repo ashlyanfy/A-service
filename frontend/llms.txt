@@ -1,43 +1,77 @@
 # A-SERVICE
 
-> A-SERVICE — единый операционный подрядчик для работ с банкоматами и банковским оборудованием по Казахстану. Компания организует обследование объекта, демонтаж, защитную упаковку, такелаж, погрузку, перевозку, разгрузку, восстановление корпуса, покраску, брендирование, монтаж, фотофиксацию и передачу согласованного результата.
+> Монтаж, демонтаж и перевозка банкоматов, утилизация списанного оборудования, изготовление козырьков, наружная мойка банкоматов и терминалов и перевозка банковской мебели в Казахстане.
 
-Канонические версии сайта:
-- Русский: /ru/
-- Қазақша: /kk/
+Қазақстанда банкоматтарды орнату, бөлшектеу, тасымалдау, кәдеге жарату, күнқағар жасау, банкоматтар мен терминалдардың сыртын жуу және банк жиһазын тасымалдау.
 
-Подтверждённые факты:
-- работа с 2012 года;
-- опыт работы более чем с 10 000 банкоматов за всё время;
-- работы организуются по территории Казахстана.
+## Русский
 
-Подтверждённый проектный опыт:
-- в 2019 году A-SERVICE выполняла покраску банкоматов и терминалов Jusan Bank в корпоративный цвет по Казахстану;
-- A-SERVICE выполняла работы с банковским оборудованием Altyn Bank; период, объём и точный состав проекта не заявляются без проектных материалов;
-- Jusan Bank указан как исторический бренд проекта 2019 года, а Alatau City Bank — как текущее наименование банка с 2025 года.
+- [Обслуживание банкоматов и банковских отделений в Казахстане](https://a-service.asia/ru/)
 
-Ключевые услуги:
-- монтаж банкоматов;
-- демонтаж банкоматов;
-- перевозка и перемещение банкоматов по Казахстану;
-- такелаж, защищённая погрузка и разгрузка;
-- восстановление и покраска банкоматов;
-- брендирование и ребрендинг банкоматов;
-- изготовление, доставка, монтаж и ремонт защитных козырьков;
-- корпоративная логистика и перемещение имущества.
+### Услуги
 
-Коммерческие условия:
-- опубликованные суммы являются базовыми расценками;
-- итоговая цена определяется после оценки исходных данных;
-- состав, исключения, срок и итоговая стоимость фиксируются в коммерческом предложении.
+- [Изготовление козырьков для банкоматов в Казахстане](https://a-service.asia/ru/uslugi/izgotovlenie-kozyrkov/)
+- [Монтаж и демонтаж банкоматов в Казахстане](https://a-service.asia/ru/uslugi/montazh-i-demontazh-bankomatov/)
+- [Монтаж и демонтаж платёжных терминалов в Казахстане](https://a-service.asia/ru/uslugi/montazh-i-demontazh-terminalov/)
+- [Наружная мойка банкоматов и терминалов в Казахстане](https://a-service.asia/ru/uslugi/naruzhnaya-moyka-bankomatov-i-terminalov/)
+- [Перевозка и доставка банкоматов по Казахстану](https://a-service.asia/ru/uslugi/perevozka-bankomatov/)
+- [Перевозка мебели между отделениями банка в Казахстане](https://a-service.asia/ru/uslugi/perevozka-bankovskoy-mebeli/)
+- [Покраска и брендирование банкоматов в Казахстане](https://a-service.asia/ru/uslugi/pokraska-i-brendirovanie-bankomatov/)
+- [Ремонт козырьков банкоматов и восстановление покрытия](https://a-service.asia/ru/uslugi/remont-kozyrkov/)
+- [Такелаж банковского оборудования в Казахстане](https://a-service.asia/ru/uslugi/takelazh-bankovskogo-oborudovaniya/)
+- [Упаковка и маркировка банковской мебели при переезде](https://a-service.asia/ru/uslugi/upakovka-bankovskoy-mebeli/)
+- [Вывоз и утилизация списанных банкоматов в Казахстане](https://a-service.asia/ru/uslugi/utilizatsiya-bankomatov/)
 
-Контакты:
-- телефон и WhatsApp: +7 777 729 49 64;
-- email: haba-87@mail.ru;
-- ответственный контакт: Асылжанов Азиз.
+### Портфолио и кейсы
 
-Ограничение утверждений:
-- названия и логотипы на рабочих фотографиях не должны автоматически трактоваться как публичное подтверждение клиентских отношений;
-- не следует приписывать проектам неподтверждённые города, банки, сроки, сертификаты, SLA или результаты.
+- [Работы с банковским оборудованием Altyn Bank · A-SERVICE](https://a-service.asia/ru/proekty/altyn/)
+- [Подготовка корпусов терминалов к окраске и сборке · A-SERVICE](https://a-service.asia/ru/proekty/batch/)
+- [Изготовление и монтаж козырька для уличного банкомата · A-SERVICE](https://a-service.asia/ru/proekty/canopies/)
+- [Покраска банкоматов и терминалов Jusan Bank · A-SERVICE](https://a-service.asia/ru/proekty/jusan/)
+- [Отделка ниши банкомата · A-SERVICE](https://a-service.asia/ru/proekty/otdelka-nishi-bankomata/)
+- [Упаковка и крепление банковского оборудования перед перевозкой · A-SERVICE](https://a-service.asia/ru/proekty/packing/)
+- [Перевозка банкоматов · A-SERVICE](https://a-service.asia/ru/proekty/perevozka-bankomatov/)
+- [Окраска корпусов банковского оборудования по образцу RAL 6018 · A-SERVICE](https://a-service.asia/ru/proekty/ral/)
+- [Подъём банкомата к месту установки · A-SERVICE](https://a-service.asia/ru/proekty/rigging/)
+- [Серийная окраска корпусов банковских терминалов · A-SERVICE](https://a-service.asia/ru/proekty/serial/)
 
-Для цитирования используйте каноническую RU- или ҚАЗ-страницу конкретной услуги.
+### Справочные страницы
+
+- [География работ A-SERVICE](https://a-service.asia/ru/geografiya/)
+- [Контакты A-SERVICE](https://a-service.asia/ru/kontakty/)
+
+## Қазақша
+
+- [Қазақстанда банкоматтар мен банк бөлімшелеріне қызмет көрсету](https://a-service.asia/kk/)
+
+### Қызметтер
+
+- [Қазақстанда банк жабдығын көтеру және жылжыту](https://a-service.asia/kk/qyzmetter/bank-zhabdygyn-koteru-zhane-zhylzhytu/)
+- [Банк жиһазын көшуге дайындау, таңбалау және қаптау](https://a-service.asia/kk/qyzmetter/bank-zhihazyn-qaptau/)
+- [Қазақстанда банк бөлімшелері арасында жиһаз тасымалдау](https://a-service.asia/kk/qyzmetter/bank-zhihazyn-tasymaldau/)
+- [Банкомат күнқағарларын жөндеу және жабынын қалпына келтіру](https://a-service.asia/kk/qyzmetter/bankomat-kunqagarlaryn-zhondeu/)
+- [Қазақстанда банкоматтарға қорғаныш күнқағар жасау](https://a-service.asia/kk/qyzmetter/bankomatka-kalqa-zhasau/)
+- [Қазақстанда банкоматтар мен терминалдардың сыртын жуу](https://a-service.asia/kk/qyzmetter/bankomattar-men-terminaldardyn-syrtyn-zhuu/)
+- [Қазақстанда банкоматтарды бояу және брендтеу](https://a-service.asia/kk/qyzmetter/bankomattardy-boyau-zhane-brendteu/)
+- [Қазақстанда есептен шыққан банкоматтарды кәдеге жарату](https://a-service.asia/kk/qyzmetter/bankomattardy-kadege-zharatu/)
+- [Қазақстанда банкоматтарды орнату және бөлшектеу](https://a-service.asia/kk/qyzmetter/bankomattardy-ornatu-zhane-bolshekteu/)
+- [Қазақстанда банкоматтарды тасымалдау](https://a-service.asia/kk/qyzmetter/bankomattardy-tasymaldau/)
+- [Қазақстанда төлем терминалдарын орнату және бөлшектеу](https://a-service.asia/kk/qyzmetter/terminaldardy-ornatu-zhane-bolshekteu/)
+
+### Портфолио және жобалар
+
+- [Altyn Bank жабдығымен атқарылған жұмыстар · A-SERVICE](https://a-service.asia/kk/zhobalar/altyn/)
+- [Банкомат ойығын әрлеу · A-SERVICE](https://a-service.asia/kk/zhobalar/bankomat-oyygyn-arleu/)
+- [Банкоматтарды тасымалдау · A-SERVICE](https://a-service.asia/kk/zhobalar/bankomattardy-tasymaldau/)
+- [Терминал корпустарын бояуға және құрастыруға дайындау · A-SERVICE](https://a-service.asia/kk/zhobalar/batch/)
+- [Көшедегі банкоматқа күнқағар жасау және орнату · A-SERVICE](https://a-service.asia/kk/zhobalar/canopies/)
+- [Jusan Bank банкоматтары мен терминалдарын бояу · A-SERVICE](https://a-service.asia/kk/zhobalar/jusan/)
+- [Банк жабдығын тасымалдау алдында қаптау және бекіту · A-SERVICE](https://a-service.asia/kk/zhobalar/packing/)
+- [Банк жабдығының корпусын RAL 6018 үлгісі бойынша бояу · A-SERVICE](https://a-service.asia/kk/zhobalar/ral/)
+- [Банкоматты орнату орнына көтеріп жеткізу · A-SERVICE](https://a-service.asia/kk/zhobalar/rigging/)
+- [Банк терминалдарының корпустарын сериямен бояу · A-SERVICE](https://a-service.asia/kk/zhobalar/serial/)
+
+### Анықтамалық беттер
+
+- [A-SERVICE байланыстары](https://a-service.asia/kk/baylanystar/)
+- [A-SERVICE жұмыс географиясы](https://a-service.asia/kk/geografiya/)

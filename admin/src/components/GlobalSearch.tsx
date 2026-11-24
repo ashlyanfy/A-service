@@ -54,8 +54,8 @@ export function GlobalSearch() {
               onClick={() => setOpen(false)}
               className="block rounded-xl px-3 py-2 hover:bg-brand-50"
             >
-              <div className="text-sm font-medium text-ink">{lead.name}</div>
-              <div className="text-xs text-muted">{lead.phone}</div>
+              <div className="text-sm font-medium text-ink">{lead.name || lead.email || lead.phone || t("request_kind_legacy")}</div>
+              {lead.name && <div className="text-xs text-muted">{lead.phone || lead.email}</div>}
             </Link>
           ))}
           {data?.pages.map((page) => (

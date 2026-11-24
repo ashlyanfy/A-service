@@ -88,3 +88,42 @@
 /en/solutions-for-corporate-offices/ /ru/resheniya-dlya-korporativnyh-ofisov/
 /en/terms/ /ru/usloviya-ispolzovaniya/
 /en/thank-you/ /ru/spasibo/
+
+# Согласованные адреса каталога и услуг после обновления витрины.
+/ru/uslugi/ /ru/#services
+/kk/kyzmetter/ /kk/#services
+/kk/qyzmetter/ /kk/#services
+/ru/proekty/ /ru/#projects
+/kk/zhobalar/ /kk/#projects
+/ru/montazh-bankomatov/ /ru/uslugi/montazh-i-demontazh-bankomatov/
+/kk/bankomat-ornatu/ /kk/qyzmetter/bankomattardy-ornatu-zhane-bolshekteu/
+/ru/demontazh-bankomatov/ /ru/uslugi/montazh-i-demontazh-bankomatov/
+/kk/bankomat-demontazhy/ /kk/qyzmetter/bankomattardy-ornatu-zhane-bolshekteu/
+/ru/izgotovlenie-kozyrkov/ /ru/uslugi/izgotovlenie-kozyrkov/
+/kk/kalqa-zhasau/ /kk/qyzmetter/bankomatka-kalqa-zhasau/
+/ru/perevozka-ofisnoy-mebeli/ /ru/uslugi/perevozka-bankovskoy-mebeli/
+/kk/ofis-zhihazyn-tasymaldau/ /kk/qyzmetter/bank-zhihazyn-tasymaldau/
+/ru/pokraska-bankomatov/ /ru/uslugi/pokraska-i-brendirovanie-bankomatov/
+/kk/bankomattardy-boyau/ /kk/qyzmetter/bankomattardy-boyau-zhane-brendteu/
+/ru/brendirovanie-bankomatov/ /ru/uslugi/pokraska-i-brendirovanie-bankomatov/
+/kk/bankomattardy-brendteu/ /kk/qyzmetter/bankomattardy-boyau-zhane-brendteu/
+/ru/takelazhnye-raboty/ /ru/uslugi/takelazh-bankovskogo-oborudovaniya/
+/kk/takelazhdyk-zhumystar/ /kk/qyzmetter/bank-zhabdygyn-koteru-zhane-zhylzhytu/
+/ru/montazh-platezhnyh-terminalov/ /ru/uslugi/montazh-i-demontazh-terminalov/
+/kk/tolem-terminaldaryn-ornatu/ /kk/qyzmetter/terminaldardy-ornatu-zhane-bolshekteu/
+/ru/demontazh-platezhnyh-terminalov/ /ru/uslugi/montazh-i-demontazh-terminalov/
+/kk/tolem-terminaldaryn-demontazhdau/ /kk/qyzmetter/terminaldardy-ornatu-zhane-bolshekteu/
+/ru/remont-kozyrkov/ /ru/uslugi/remont-kozyrkov/
+/kk/kalqa-zhondeu/ /kk/qyzmetter/bankomat-kunqagarlaryn-zhondeu/
+/ru/upakovka-mebeli/ /ru/uslugi/upakovka-bankovskoy-mebeli/
+/kk/zhihazdy-qaptau/ /kk/qyzmetter/bank-zhihazyn-qaptau/
+
+# Перенесённые услуги и кейс о подъёме банкомата.
+/ru/uslugi/remont-denezhnyh-kasset/ /ru/#services
+/ru/uslugi/vykup-denezhnyh-kasset/ /ru/#services
+/kk/qyzmetter/aksha-kassetalaryn-zhondeu/ /kk/#services
+/kk/qyzmetter/aksha-kassetalaryn-satyp-alu/ /kk/#services
+/ru/uslugi/chistka-bankomatov-i-terminalov/ /ru/uslugi/naruzhnaya-moyka-bankomatov-i-terminalov/
+/kk/qyzmetter/bankomattar-men-terminaldardy-tazalau/ /kk/qyzmetter/bankomattar-men-terminaldardyn-syrtyn-zhuu/
+/ru/proekty/podem-i-peremeshchenie-terminala/ /ru/proekty/rigging/
+/kk/zhobalar/terminaldy-koteru-zhane-zhylzhytu/ /kk/zhobalar/rigging/

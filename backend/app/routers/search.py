@@ -3,6 +3,7 @@ from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.deps import require_any
+from app.bank_archive import ARCHIVED_SLUGS
 from app.database import get_db
 from app.models.lead import Lead
 from app.models.page import Page
@@ -62,7 +63,7 @@ async def search(
     )
     leads = leads_result.scalars().all()
 
-    pages_result = await db.execute(select(Page))
+    pages_result = await db.execute(select(Page).where(Page.slug.not_in(ARCHIVED_SLUGS)))
     pages = pages_result.scalars().all()
 
     page_matches: list[PageSearchResult] = []
@@ -71,7 +72,7 @@ async def search(
 
     return SearchResults(
         leads=[
-            LeadSearchResult(id=lead.id, name=lead.name, phone=lead.phone, status=lead.status.value)
+            LeadSearchResult(id=lead.id, name=lead.name, phone=lead.phone, email=lead.email, status=lead.status.value)
             for lead in leads
         ],
         pages=page_matches[:20],

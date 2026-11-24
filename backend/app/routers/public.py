@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
 from app.core.limiter import limiter
+from app.bank_archive import ARCHIVED_SLUGS
 from app.database import get_db
 from app.models.event import SiteEvent, SiteEventType
 from app.models.lead import Lead
@@ -169,7 +170,7 @@ async def get_public_contacts(db: AsyncSession = Depends(get_db)) -> dict:
 @router.get("/pages/{slug:path}", response_model=PublicPageOut)
 async def get_public_page(slug: str, db: AsyncSession = Depends(get_db)) -> PublicPageOut:
     slug = "/" + slug.strip("/") + "/"
-    result = await db.execute(select(Page).where(Page.slug == slug))
+    result = await db.execute(select(Page).where(Page.slug == slug, Page.slug.not_in(ARCHIVED_SLUGS)))
     page = result.scalar_one_or_none()
     if page is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Page not found")
@@ -181,7 +182,7 @@ async def get_public_page(slug: str, db: AsyncSession = Depends(get_db)) -> Publ
 @router.get("/seo/{slug:path}", response_model=SeoOut)
 async def get_public_seo(slug: str, db: AsyncSession = Depends(get_db)) -> SeoOut:
     slug = "/" + slug.strip("/") + "/"
-    result = await db.execute(select(Page).where(Page.slug == slug))
+    result = await db.execute(select(Page).where(Page.slug == slug, Page.slug.not_in(ARCHIVED_SLUGS)))
     page = result.scalar_one_or_none()
     if page is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Page not found")

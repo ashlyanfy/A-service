@@ -7,6 +7,7 @@ from app.config import settings
 from app.core.limiter import limiter
 from app.routers import (
     auth,
+    bank_requests,
     events,
     leads,
     notifications,
@@ -25,6 +26,7 @@ MAX_BODY_SIZE = 12 * 1024 * 1024
 app = FastAPI(
     title="A-SERVICE Admin API",
     version="1.0.0",
+    lifespan=bank_requests.mail_lifespan,
     docs_url="/docs" if settings.env == "development" else None,
     redoc_url=None,
     openapi_url="/openapi.json" if settings.env == "development" else None,
@@ -77,6 +79,7 @@ app.include_router(settings_router.router)
 app.include_router(notifications.router)
 app.include_router(search.router)
 app.include_router(public.router)
+app.include_router(bank_requests.router)
 
 
 @app.get("/health")

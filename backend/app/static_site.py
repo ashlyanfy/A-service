@@ -11,6 +11,7 @@
 """
 import json
 import os
+from urllib.parse import parse_qs
 
 from fastapi import FastAPI, Request
 from fastapi.responses import RedirectResponse
@@ -37,6 +38,8 @@ def load_redirects() -> dict[str, str]:
 
 def _normalize(path: str) -> str:
     """Адреса сайта заканчиваются слэшем; сравниваем в одном виде."""
+    if path.endswith("/index.html"):
+        path = path[:-len("index.html")]
     if not path.endswith("/"):
         path += "/"
     return path
@@ -48,7 +51,8 @@ class SiteFiles(StaticFiles):
     def file_response(self, full_path, stat_result, scope, status_code=200):
         response = super().file_response(full_path, stat_result, scope, status_code)
         path = scope.get("path", "")
-        if path.startswith(IMMUTABLE_PREFIXES):
+        versioned = b"v" in parse_qs(scope.get("query_string", b""))
+        if path.startswith(IMMUTABLE_PREFIXES) and (versioned or not path.startswith("/assets/")):
             response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
         elif path in NO_STORE_PATHS:
             response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
@@ -69,7 +73,8 @@ def mount_site(app: FastAPI) -> bool:
         target = redirects.get(_normalize(request.url.path))
         if target:
             query = ("?" + request.url.query) if request.url.query else ""
-            return RedirectResponse(target + query, status_code=301)
+            path, separator, fragment = target.partition("#")
+            return RedirectResponse(path + query + separator + fragment, status_code=301)
         return await call_next(request)
 
     # html=True: каталог отдаётся как index.html, а отсутствующий файл — как
