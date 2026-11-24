@@ -7,6 +7,7 @@ class LeadSearchResult(BaseModel):
     id: uuid.UUID
     name: str
     phone: str
+    email: str | None = None
     status: str
 
 

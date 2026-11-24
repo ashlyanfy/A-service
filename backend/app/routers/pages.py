@@ -3,6 +3,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.deps import require_admin
+from app.bank_archive import ARCHIVED_SLUGS
 from app.database import get_db
 from app.models.audit import AuditLog
 from app.models.page import Page
@@ -17,14 +18,14 @@ async def list_pages(
     db: AsyncSession = Depends(get_db),
     _user: User = Depends(require_admin),
 ) -> list[PageListItem]:
-    result = await db.execute(select(Page).order_by(Page.slug))
+    result = await db.execute(select(Page).where(Page.slug.not_in(ARCHIVED_SLUGS)).order_by(Page.slug))
     pages = result.scalars().all()
     return [PageListItem.model_validate(p) for p in pages]
 
 
 async def _get_page_or_404(slug: str, db: AsyncSession) -> Page:
     slug = "/" + slug.strip("/") + "/"
-    result = await db.execute(select(Page).where(Page.slug == slug))
+    result = await db.execute(select(Page).where(Page.slug == slug, Page.slug.not_in(ARCHIVED_SLUGS)))
     page = result.scalar_one_or_none()
     if page is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Page not found")

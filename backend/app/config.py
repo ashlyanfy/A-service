@@ -2,7 +2,7 @@ import re
 import secrets
 from functools import lru_cache
 
-from pydantic import model_validator
+from pydantic import SecretStr, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 INSECURE_SECRET_KEY = "change-me-to-a-long-random-string"
@@ -13,6 +13,10 @@ class Settings(BaseSettings):
 
     # Database (SQLite по умолчанию для разработки; в проде — PostgreSQL)
     database_url: str = "sqlite+aiosqlite:///./aservice.db"
+
+    # Только для первоначального создания пользователя при пустой таблице users.
+    seed_admin_email: str = ""
+    seed_admin_password: SecretStr = SecretStr("")
 
     # JWT
     secret_key: str = INSECURE_SECRET_KEY
@@ -41,6 +45,7 @@ class Settings(BaseSettings):
     vapid_claims_sub: str = "mailto:haba-87@mail.ru"
 
     # SMTP
+    requests_notify_email: str = ""
     smtp_host: str = ""
     smtp_port: int = 587
     smtp_user: str = ""

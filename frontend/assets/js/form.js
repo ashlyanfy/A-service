@@ -195,7 +195,21 @@
   /* формы на страницах (Контакты, Запрос КП) */
   document.querySelectorAll('form.project-brief-form').forEach(function (form) {
     bindSubmit(form);
-    if (!form.closest('dialog')) initWizard(form);
+    if (!form.closest('dialog')) {
+      initWizard(form);
+      if (window.mountBankRequest) {
+        const shortForm = document.createElement('div');
+        const advanced = document.createElement('details');
+        const label = document.createElement('summary');
+        label.textContent = LANG === 'kk'
+          ? 'Толық сұрау жіберу және файл тіркеу'
+          : 'Передать подробное задание и прикрепить файл';
+        advanced.className = 'quote-advanced';
+        form.before(shortForm, advanced);
+        advanced.append(label, form);
+        window.mountBankRequest(shortForm, 'general');
+      }
+    }
   });
 
   /* диалог расчёта */
@@ -216,6 +230,10 @@
   function doc() { return document.documentElement; }
 
   function openDialog(detail) {
+    if (window.openBankQuote) {
+      window.openBankQuote('general', detail && detail.task);
+      return;
+    }
     if (!dialog) return;
     if (dialogWizard) {
       dialogWizard.setSource((detail && detail.sourceService) || location.pathname);

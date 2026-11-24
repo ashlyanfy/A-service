@@ -169,6 +169,6 @@ export interface Setting {
 }
 
 export interface SearchResults {
-  leads: { id: string; name: string; phone: string; status: string }[];
+  leads: { id: string; name: string; phone: string; email?: string | null; status: string }[];
   pages: { slug: string; title: string; block_id: string; block_type: string; snippet: string }[];
 }

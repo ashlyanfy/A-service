@@ -1,7 +1,7 @@
 """Первичное наполнение: админ, страницы лендинга с SEO, базовые настройки.
 
 Страницы и их SEO читаются из реального контента лендинга (src/content),
-поэтому в админке сразу видны все 170 страниц с их текущими title/description.
+при первом запуске записи появляются в админке с заголовками и описаниями из поставки.
 
 Запуск из папки backend:  python -m app.seed
 """
@@ -12,16 +12,19 @@ import os
 import re
 import sys
 
-from sqlalchemy import select
+from pydantic import EmailStr, TypeAdapter, ValidationError
+from sqlalchemy import select, update
 
+from app.bank_archive import ARCHIVED_SLUGS
+from app.bank_seed import bank_pages, edited_pages, upgrade_seeded_values
+
+from app.config import settings
 from app.core.security import hash_password
 from app.database import AsyncSessionLocal, Base, engine
+from app.models.audit import AuditLog
 from app.models.page import Page, Seo
 from app.models.setting import Setting
 from app.models.user import User, UserRole
-
-ADMIN_EMAIL = os.environ.get("SEED_ADMIN_EMAIL", "admin@a-service.asia")
-ADMIN_PASSWORD = os.environ.get("SEED_ADMIN_PASSWORD", "ChangeMe123!")
 
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 CONTENT_DIR = os.path.join(REPO, "src", "content")
@@ -96,35 +99,70 @@ def read_landing_pages() -> list[dict]:
     return pages
 
 
+async def update_previous_descriptions(db, landing):
+    """Меняем только отмеченные заводские описания. Собственные правки редактора сохраняем."""
+    if not os.path.isfile(PAGES_JSON):
+        return
+    with open(PAGES_JSON, encoding="utf-8") as snapshot:
+        records = json.load(snapshot)
+    for row in records:
+        previous = row.get("previous_description")
+        slug = row["slug"]
+        if not previous or slug not in landing:
+            continue
+        edited = select(AuditLog.id).where(AuditLog.entity == "seo", AuditLog.entity_id == slug).exists()
+        page_id = select(Page.id).where(Page.slug == slug).scalar_subquery()
+        await db.execute(update(Seo).where(
+            Seo.page_id == page_id, Seo.description == previous, ~edited
+        ).values(description=landing[slug]["description"]))
+
+
+async def seed_initial_admin(db):
+    if await db.scalar(select(User.id).limit(1)) is not None:
+        return
+    password = settings.seed_admin_password.get_secret_value()
+    if len(password) < 16 or len(password.encode("utf-8")) > 72:
+        print("Первичный администратор не создан. Задайте SEED_ADMIN_EMAIL и собственный "
+              "SEED_ADMIN_PASSWORD (от 16 символов, до 72 байт UTF-8).", file=sys.stderr)
+        return
+    try:
+        email = TypeAdapter(EmailStr).validate_python(settings.seed_admin_email)
+    except ValidationError:
+        print("Первичный администратор не создан. Проверьте SEED_ADMIN_EMAIL.", file=sys.stderr)
+        return
+    db.add(User(email=email, name="Администратор", role=UserRole.ADMIN, password_hash=hash_password(password)))
+    print("+ первичный администратор")
+
+
 async def seed() -> None:
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
     async with AsyncSessionLocal() as db:
-        # --- админ ---
-        result = await db.execute(select(User).where(User.email == ADMIN_EMAIL))
-        if result.scalar_one_or_none() is None:
-            db.add(
-                User(
-                    email=ADMIN_EMAIL,
-                    name="Администратор",
-                    role=UserRole.ADMIN,
-                    password_hash=hash_password(ADMIN_PASSWORD),
-                )
-            )
-            print(f"+ admin user {ADMIN_EMAIL} (пароль из SEED_ADMIN_PASSWORD — смените после входа)")
+        await seed_initial_admin(db)
 
         # --- страницы лендинга + SEO ---
         created = 0
-        for info in read_landing_pages():
+        legacy = {row["slug"]: row for row in read_landing_pages() if row["slug"] not in ARCHIVED_SLUGS}
+        await update_previous_descriptions(db, legacy)
+        catalog = bank_pages()
+        changed_by_staff = await edited_pages(db, catalog)
+        for info in {**legacy, **catalog}.values():
             result = await db.execute(select(Page).where(Page.slug == info["slug"]))
-            if result.scalar_one_or_none() is not None:
+            existing = result.scalar_one_or_none()
+            previous = HOME_BLOCKS_KK if info["slug"] == "/kk/" else HOME_BLOCKS_RU
+            if existing is not None:
+                if info["slug"] in catalog:
+                    await upgrade_seeded_values(db, existing, legacy.get(info["slug"]), info,
+                                                previous[0]["data"], changed_by_staff)
                 continue
             blocks = []
             if info["slug"] == "/ru/":
                 blocks = HOME_BLOCKS_RU
             elif info["slug"] == "/kk/":
                 blocks = HOME_BLOCKS_KK
+            if blocks and "hero" in info:
+                blocks = [{**blocks[0], "data": info["hero"]}]
             page = Page(slug=info["slug"], title=info["title"], blocks=blocks)
             db.add(page)
             await db.flush()

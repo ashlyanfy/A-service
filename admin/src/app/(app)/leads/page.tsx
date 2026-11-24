@@ -10,15 +10,8 @@ import { StatusBadge } from "@/components/StatusBadge";
 import { api } from "@/lib/api";
 import { downloadFile } from "@/lib/download";
 import { useI18n } from "@/lib/i18n/context";
+import { categoryLabel, currentCategoryKeys, previousCategoryKeys, requestKind } from "@/lib/lead-labels";
 import { LeadListResponse, LeadStatus } from "@/types";
-
-const CATEGORY_KEYS: Record<string, string> = {
-  "atm-installation": "cat_atm_installation",
-  "transport-rigging": "cat_transport_rigging",
-  "restoration-branding": "cat_restoration_branding",
-  canopies: "cat_canopies",
-  "corporate-logistics": "cat_corporate_logistics",
-};
 
 export default function LeadsPage() {
   const { t } = useI18n();
@@ -30,6 +23,7 @@ export default function LeadsPage() {
 
   const { data } = useQuery({
     queryKey: ["leads", "list", q, status, category, page],
+    refetchInterval: 30_000,
     queryFn: async () =>
       (
         await api.get<LeadListResponse>("/leads", {
@@ -45,9 +39,6 @@ export default function LeadsPage() {
   });
 
   const totalPages = data ? Math.max(1, Math.ceil(data.total / pageSize)) : 1;
-
-  const catLabel = (value: string | null) =>
-    value && CATEGORY_KEYS[value] ? t(CATEGORY_KEYS[value] as never) : value ?? "—";
 
   return (
     <div>
@@ -94,6 +85,7 @@ export default function LeadsPage() {
           <option value="DECLINED">{t("status_declined")}</option>
         </select>
         <select
+          aria-label={t("leads_table_category")}
           className="input w-auto"
           value={category}
           onChange={(e) => {
@@ -101,12 +93,17 @@ export default function LeadsPage() {
             setPage(1);
           }}
         >
-          <option value="">{t("leads_table_category")}: —</option>
-          {Object.entries(CATEGORY_KEYS).map(([value, key]) => (
-            <option key={value} value={value}>
-              {t(key as never)}
-            </option>
-          ))}
+          <option value="">{t("request_profile_all")}</option>
+          <optgroup label={t("request_profile_current")}>
+            {Object.entries(currentCategoryKeys).map(([value, key]) => (
+              <option key={value} value={value}>{t(key)}</option>
+            ))}
+          </optgroup>
+          <optgroup label={t("request_profile_previous")}>
+            {Object.entries(previousCategoryKeys).map(([value, key]) => (
+              <option key={value} value={value}>{t(key)}</option>
+            ))}
+          </optgroup>
         </select>
       </div>
 
@@ -116,7 +113,7 @@ export default function LeadsPage() {
             <tr className="border-b border-line text-muted">
               <th className="px-4 py-3">{t("leads_table_name")}</th>
               <th className="px-4 py-3">{t("leads_table_company")}</th>
-              <th className="px-4 py-3">{t("leads_table_phone")}</th>
+              <th className="px-4 py-3">{t("lead_contact")}</th>
               <th className="px-4 py-3">{t("leads_table_category")}</th>
               <th className="px-4 py-3">{t("leads_table_status")}</th>
               <th className="px-4 py-3">{t("leads_table_created")}</th>
@@ -134,12 +131,12 @@ export default function LeadsPage() {
               <tr key={lead.id} className="border-b border-line/60 transition hover:bg-brand-50/50 last:border-0">
                 <td className="px-4 py-3">
                   <Link href={`/leads/${lead.id}`} className="font-medium text-ink hover:text-brand-700">
-                    {lead.name}
+                    {lead.name || requestKind(lead.source, t)}
                   </Link>
                 </td>
                 <td className="px-4 py-3">{lead.company ?? "—"}</td>
-                <td className="px-4 py-3 whitespace-nowrap">{lead.phone}</td>
-                <td className="px-4 py-3">{catLabel(lead.category)}</td>
+                <td className="px-4 py-3 whitespace-nowrap">{lead.phone || lead.email || "—"}</td>
+                <td className="px-4 py-3">{categoryLabel(lead.category, t)}</td>
                 <td className="px-4 py-3">
                   <StatusBadge status={lead.status} />
                 </td>

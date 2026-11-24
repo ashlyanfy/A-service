@@ -7,10 +7,12 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { Header } from "@/components/Header";
+import { LeadMailDelivery } from "@/components/LeadMailDelivery";
 import { StatusBadge } from "@/components/StatusBadge";
 import { api } from "@/lib/api";
 import { downloadFile } from "@/lib/download";
 import { useI18n } from "@/lib/i18n/context";
+import { categoryLabel, requestKind } from "@/lib/lead-labels";
 import { LeadDetail, LeadStatus, User } from "@/types";
 
 const STATUSES: LeadStatus[] = [
@@ -28,14 +30,6 @@ const STATUS_KEYS: Record<LeadStatus, string> = {
   DECLINED: "status_declined",
 };
 
-const CATEGORY_KEYS: Record<string, string> = {
-  "atm-installation": "cat_atm_installation",
-  "transport-rigging": "cat_transport_rigging",
-  "restoration-branding": "cat_restoration_branding",
-  canopies: "cat_canopies",
-  "corporate-logistics": "cat_corporate_logistics",
-};
-
 export default function LeadDetailPage() {
   const { t } = useI18n();
   const params = useParams<{ id: string }>();
@@ -50,6 +44,12 @@ export default function LeadDetailPage() {
   const { data: lead } = useQuery({
     queryKey: ["lead", leadId],
     queryFn: async () => (await api.get<LeadDetail>(`/leads/${leadId}`)).data,
+  });
+
+  const materialDownload = useMutation({
+    mutationFn: (locale: string) => downloadFile(
+      `/leads/${leadId}/material`, `A-SERVICE-profile-${locale}.pdf`,
+    ),
   });
 
   const { data: users } = useQuery({
@@ -90,10 +90,10 @@ export default function LeadDetailPage() {
 
   if (!lead) return <div className="text-muted">{t("loading")}</div>;
 
-  const catLabel = lead.category && CATEGORY_KEYS[lead.category] ? t(CATEGORY_KEYS[lead.category] as never) : lead.category;
+  const websiteRequest = lead.source === "website_service" || lead.source === "website_material";
 
   const requestRows: [string, React.ReactNode][] = [
-    [t("lead_field_category"), catLabel ?? "—"],
+    [t("lead_field_category"), categoryLabel(lead.category, t)],
     [t("lead_field_subtask"), lead.subtask ?? "—"],
     [t("lead_field_city"), lead.city ?? "—"],
     [t("lead_field_quantity"), lead.quantity ?? "—"],
@@ -105,7 +105,7 @@ export default function LeadDetailPage() {
   return (
     <div>
       <Header
-        title={lead.name}
+        title={lead.name || requestKind(lead.source, t)}
         actions={
           <>
             {savedFlash && <span className="text-sm font-medium text-emerald-600">{t("lead_saved")}</span>}
@@ -141,12 +141,14 @@ export default function LeadDetailPage() {
         <section className="card p-5">
           <h2 className="eyebrow mb-3">{t("lead_contact")}</h2>
           <dl className="space-y-2 text-sm">
-            <Row label={t("lead_field_name")}>{lead.name}</Row>
+            <Row label={t("lead_field_name")}>{lead.name || "—"}</Row>
             <Row label={t("lead_field_company")}>{lead.company ?? "—"}</Row>
             <Row label={t("lead_field_phone")}>
-              <a href={`tel:${lead.phone}`} className="text-brand-700 hover:underline">
-                {lead.phone}
-              </a>
+              {lead.phone ? (
+                <a href={`tel:${lead.phone}`} className="text-brand-700 hover:underline">
+                  {lead.phone}
+                </a>
+              ) : "—"}
             </Row>
             <Row label={t("lead_field_email")}>
               {lead.email ? (
@@ -173,6 +175,9 @@ export default function LeadDetailPage() {
         <section className="card p-5">
           <h2 className="eyebrow mb-3">{t("lead_request")}</h2>
           <dl className="space-y-2 text-sm">
+            {websiteRequest && (
+              <Row label={t("request_source_kind")}>{requestKind(lead.source, t)}</Row>
+            )}
             {requestRows.map(([label, value]) => (
               <Row key={label} label={label}>
                 {value}
@@ -183,6 +188,22 @@ export default function LeadDetailPage() {
             <div className="mt-4 rounded-xl bg-brand-50 p-3 text-sm">
               <div className="mb-1 text-xs font-semibold text-muted">{t("lead_field_message")}</div>
               <p className="whitespace-pre-wrap">{lead.message}</p>
+            </div>
+          )}
+          {lead.source === "website_material" && lead.category === "bank-profile" && (
+            <div className="mt-4">
+              <button
+                type="button"
+                className="btn-secondary w-full"
+                disabled={materialDownload.isPending}
+                onClick={() => materialDownload.mutate(lead.locale === "kk" ? "kk" : "ru")}
+              >
+                <Download size={16} />
+                {t("lead_manual_pdf")}
+              </button>
+              {materialDownload.isError && (
+                <p role="alert" className="mt-2 text-sm text-red-700">{t("lead_manual_pdf_error")}</p>
+              )}
             </div>
           )}
           {lead.attachment_name && (
@@ -252,6 +273,8 @@ export default function LeadDetailPage() {
           </label>
         </section>
       </div>
+
+      {websiteRequest && <LeadMailDelivery leadId={lead.id} />}
 
       {/* Заметки */}
       <section className="card mt-5 p-5">

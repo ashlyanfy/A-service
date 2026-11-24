@@ -1,0 +1,4 @@
+.mr-dialog .mr-box { padding-block-start: 1.8rem; }
+.mr-dialog .mr-form { margin-block-start: 1.15rem; }
+.mr-dialog .mr-success p { max-width: 23rem; }
+@media (max-width: 32rem) { .mr-dialog .mr-box { padding-block-start: 1.35rem; } }

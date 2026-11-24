@@ -19,6 +19,7 @@ import { Header } from "@/components/Header";
 import { StatusBadge } from "@/components/StatusBadge";
 import { api } from "@/lib/api";
 import { useI18n } from "@/lib/i18n/context";
+import { categoryLabel, requestKind } from "@/lib/lead-labels";
 import { DictionaryKey } from "@/lib/i18n/dictionaries";
 import {
   LeadDailyResponse,
@@ -111,6 +112,7 @@ export default function DashboardPage() {
 
   const { data: recent } = useQuery({
     queryKey: ["leads", "recent"],
+    refetchInterval: 30_000,
     queryFn: async () => (await api.get<LeadListResponse>("/leads", { params: { page: 1, page_size: 8 } })).data,
   });
 
@@ -404,7 +406,7 @@ export default function DashboardPage() {
             <thead>
               <tr className="border-b border-line text-muted">
                 <th className="py-2 pr-4">{t("leads_table_name")}</th>
-                <th className="py-2 pr-4">{t("leads_table_phone")}</th>
+                <th className="py-2 pr-4">{t("lead_contact")}</th>
                 <th className="py-2 pr-4">{t("leads_table_category")}</th>
                 <th className="py-2 pr-4">{t("leads_table_status")}</th>
                 <th className="py-2 pr-4">{t("leads_table_created")}</th>
@@ -415,11 +417,11 @@ export default function DashboardPage() {
                 <tr key={lead.id} className="border-b border-line/60 last:border-0">
                   <td className="py-2 pr-4">
                     <Link href={`/leads/${lead.id}`} className="font-medium text-ink hover:text-brand-700">
-                      {lead.name}
+                      {lead.name || requestKind(lead.source, t)}
                     </Link>
                   </td>
-                  <td className="py-2 pr-4">{lead.phone}</td>
-                  <td className="py-2 pr-4">{lead.category ?? "—"}</td>
+                  <td className="py-2 pr-4">{lead.phone || lead.email || "—"}</td>
+                  <td className="py-2 pr-4">{categoryLabel(lead.category, t)}</td>
                   <td className="py-2 pr-4">
                     <StatusBadge status={lead.status} />
                   </td>

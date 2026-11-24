@@ -7,6 +7,7 @@ from sqlalchemy import Date, DateTime, Enum, ForeignKey, Numeric, String, Text, 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import GUID, Base
+from app.models.bank_request import BankRequest
 from app.models.mixins import TimestampMixin
 from app.models.user import User  # noqa: F401
 
@@ -61,6 +62,7 @@ class Lead(TimestampMixin, Base):
         GUID(), ForeignKey("users.id", ondelete="SET NULL"), nullable=True
     )
 
+    bank_request: Mapped[BankRequest | None] = relationship(cascade="all, delete-orphan", single_parent=True)
     assignee: Mapped["User | None"] = relationship()
     notes: Mapped[list["LeadNote"]] = relationship(
         back_populates="lead", cascade="all, delete-orphan", order_by="LeadNote.created_at"
